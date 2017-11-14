@@ -1,5 +1,8 @@
 #include "mesh.h"
 #include "glut.h"
+#include <fstream>
+#include <string>
+#include <vector>
 
 mesh *object;
 
@@ -11,7 +14,7 @@ void reshape(GLsizei , GLsizei );
 
 int main(int argc, char** argv)
 {
-	object = new mesh("venus.obj");
+	object = new mesh("box.obj");
 
 	glutInit(&argc, argv);
 	glutInitWindowSize(500, 500);
@@ -25,12 +28,36 @@ int main(int argc, char** argv)
 	return 0;
 }
 
+typedef struct LIGHT
+{
+	GLfloat position[4] = { 1.0 };
+	GLfloat ambient[4] = { 1.0 };
+	GLfloat diffuse[4] = { 1.0 };
+	GLfloat specular[4] = { 1.0 };
+} LIGHT;
+
 void light()
 {
-	GLfloat light_specular[] = {1.0, 1.0, 1.0, 1.0};
-	GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
-	GLfloat light_ambient[] = {0.0, 0.0, 0.0, 1.0};
-	GLfloat light_position[] = {150.0, 150.0, 150.0, 1.0};
+	std::fstream fin("light.light", std::fstream::in);
+	std::string term;
+	std::vector<LIGHT> lights;
+	GLfloat ambient[4] = { 1.0 };
+	while(fin >> term)
+	{
+		if (term == "light")
+		{
+			LIGHT light;
+			fin >> light.position[0] >> light.position[1] >> light.position[2];
+			fin >> light.ambient[0] >> light.ambient[1] >> light.ambient[2];
+			fin >> light.diffuse[0] >> light.diffuse[1] >> light.diffuse[2];
+			fin >> light.specular[0] >> light.specular[1] >> light.specular[2];
+			lights.push_back(light);
+		}
+		else if (term == "ambient")
+		{
+			fin >> ambient[0] >> ambient[1] >> ambient[2];
+		}
+	}
 
 	glShadeModel(GL_SMOOTH);
 
@@ -40,11 +67,15 @@ void light()
 	// enable lighting
 	glEnable(GL_LIGHTING);
 	// set light property
-	glEnable(GL_LIGHT0);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+	for (int i = 0; i < lights.size(); ++i)
+	{
+		glEnable(GL_LIGHT0 + i);
+		glLightfv(GL_LIGHT0 + i, GL_POSITION, lights[i].position);
+		glLightfv(GL_LIGHT0 + i, GL_DIFFUSE, lights[i].diffuse);
+		glLightfv(GL_LIGHT0 + i, GL_SPECULAR, lights[i].specular);
+		glLightfv(GL_LIGHT0 + i, GL_AMBIENT, lights[i].ambient);
+	}
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
 }
 
 void display()
