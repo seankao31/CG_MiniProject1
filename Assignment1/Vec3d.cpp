@@ -71,3 +71,17 @@ GLdouble Vec3d::length()
 {
 	return sqrt(pow(ptr[0], 2) + pow(ptr[1], 2) + pow(ptr[2], 2));
 }
+
+GLdouble dot(Vec3d lhs, Vec3d rhs)
+{
+	return lhs[0] * rhs[0] + lhs[1] * rhs[1] + lhs[2] * rhs[2];
+}
+
+Vec3d cross(Vec3d lhs, Vec3d rhs)
+{
+	Vec3d vec3d;
+	vec3d[0] = lhs[1] * rhs[2] - lhs[2] * rhs[1];
+	vec3d[1] = lhs[2] * rhs[0] - lhs[0] * rhs[2];
+	vec3d[2] = lhs[0] * rhs[1] - lhs[1] * rhs[0];
+	return vec3d;
+}
