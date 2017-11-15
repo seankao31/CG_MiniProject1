@@ -9,11 +9,12 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
-#define SCENE "test1"
-// 0.00005 for test1, 0.005 for test2
-#define ZOOM_SPEED 0.00005
+#define SCENE "test2"
+// 0.0001 for test1, 0.005 for test2
+#define ZOOM_SPEED 0.005
 // for test1, for test2
 #define ROTATE_SPEED 20
+#define DRAG_SPEED 0.05
 
 Scene *scene;
 View *view;
@@ -24,6 +25,14 @@ int windowSize[2];
 void display();
 void reshape(GLsizei, GLsizei);
 void keyboard(unsigned char, int, int);
+void mouse(int, int, int, int);
+void motion(int, int);
+
+struct Mouse
+{
+	bool left_button_pressing = false;
+	int x, y;
+} mouse_info;
 
 int main(int argc, char** argv)
 {
@@ -40,6 +49,8 @@ int main(int argc, char** argv)
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
+	glutMouseFunc(mouse);
+	glutMotionFunc(motion);
 	glutMainLoop();
 
 	return 0;
@@ -78,12 +89,51 @@ void keyboard(unsigned char key, int x, int y)
 	{
 	case 'w':
 		view->eye = view->eye + look_direction * ZOOM_SPEED * look_direction.length();
+		std::cout << "Zoom in" << std::endl;
 		glutPostRedisplay();
 		break;
 	case 's':
 		view->eye = view->eye - look_direction * ZOOM_SPEED * look_direction.length();
+		std::cout << "Zoom out" << std::endl;
 		glutPostRedisplay();
 		break;
+	default:
+		if ('1' <= key && key <= '9')
+		{
+			std::cout << "Select " << key << std::endl;
+			scene->select = key - '1';
+		}
 	}
 }
 
+void mouse(int button, int state, int x, int y)
+{
+	if (button == GLUT_LEFT_BUTTON)
+	{
+		if (state == GLUT_DOWN)
+		{
+			mouse_info.left_button_pressing = true;
+			mouse_info.x = x;
+			mouse_info.y = y;
+			std::cout << "left down at " << x << ' ' << y << std::endl;
+		}
+		else if (state == GLUT_UP)
+		{
+			mouse_info.left_button_pressing = false;
+			std::cout << "left up at " << x << ' ' << y << std::endl;
+		}
+	}
+}
+
+void motion(int x, int y)
+{
+	if (mouse_info.left_button_pressing && 0 <= scene->select && scene->select < scene->models.size())
+	{
+		scene->models[scene->select].translate[0] += x - mouse_info.x;
+		scene->models[scene->select].translate[1] += y - mouse_info.y;
+		mouse_info.x = x;
+		mouse_info.y = y;
+		std::cout << "left moving at " << x << ' ' << y << std::endl;
+		glutPostRedisplay();
+	}
+}
