@@ -1,50 +1,55 @@
-#include "mesh.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include "Mesh.h"
 #include "glut.h"
+#include "View.h"
+#include "Light.h"
+#include "Scene.h"
+#include "SceneManager.h"
 
-mesh *object;
+#define SCENE "test1"
+
+SceneManager *sm;
+Scene *scene;
+View *view;
+Light *light;
 
 int windowSize[2];
 
-void light();
 void display();
-void reshape(GLsizei , GLsizei );
+void reshape(GLsizei, GLsizei);
+void keyboard(unsigned char, int, int);
+void mouse(int, int, int, int);
+void motion(int, int);
+
+struct Mouse
+{
+	bool left_button_pressing = false;
+	int x, y;
+} mouse_info;
 
 int main(int argc, char** argv)
 {
-	object = new mesh("venus.obj");
+	sm = new SceneManager(SCENE);
+	view = new View(sm->view_file);
+	light = new Light(sm->light_file);
+	scene = new Scene(sm->scene_file);
 
 	glutInit(&argc, argv);
-	glutInitWindowSize(500, 500);
-	glutInitWindowPosition(0, 0);
+	glutInitWindowSize(view->viewport[2], view->viewport[3]);
+	glutInitWindowPosition(view->viewport[0], view->viewport[1]);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	glutCreateWindow("Mesh Example");
+	glutCreateWindow("Assignment1");
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
+	glutKeyboardFunc(keyboard);
+	glutMouseFunc(mouse);
+	glutMotionFunc(motion);
 	glutMainLoop();
 
 	return 0;
-}
-
-void light()
-{
-	GLfloat light_specular[] = {1.0, 1.0, 1.0, 1.0};
-	GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
-	GLfloat light_ambient[] = {0.0, 0.0, 0.0, 1.0};
-	GLfloat light_position[] = {150.0, 150.0, 150.0, 1.0};
-
-	glShadeModel(GL_SMOOTH);
-
-	// z buffer enable
-	glEnable(GL_DEPTH_TEST);
-
-	// enable lighting
-	glEnable(GL_LIGHTING);
-	// set light property
-	glEnable(GL_LIGHT0);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 }
 
 void display()
@@ -56,49 +61,9 @@ void display()
 	glDepthFunc(GL_LEQUAL);                    // The Type Of Depth Test To Do
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//這行把畫面清成黑色並且清除z buffer
 
-	// viewport transformation
-	glViewport(0, 0, windowSize[0], windowSize[1]);
-
-	// projection transformation
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(60.0, (GLfloat)windowSize[0]/(GLfloat)windowSize[1], 1.0, 1000.0);
-	// viewing and modeling transformation
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(	200.0, 300.0, 150.0,// eye
-				0.0, 0.0, 0.0,     // center
-				0.0, 1.0, 0.0);    // up
-
-	//注意light位置的設定，要在gluLookAt之後
-	light();
-
-	int lastMaterial = -1;
-	for(size_t i=0;i < object->fTotal;++i)
-	{
-		// set material property if this face used different material
-		if(lastMaterial != object->faceList[i].m)
-		{
-			lastMaterial = (int)object->faceList[i].m;
-			glMaterialfv(GL_FRONT, GL_AMBIENT  , object->mList[lastMaterial].Ka);
-			glMaterialfv(GL_FRONT, GL_DIFFUSE  , object->mList[lastMaterial].Kd);
-			glMaterialfv(GL_FRONT, GL_SPECULAR , object->mList[lastMaterial].Ks);
-			glMaterialfv(GL_FRONT, GL_SHININESS, &object->mList[lastMaterial].Ns);
-
-			//you can obtain the texture name by object->mList[lastMaterial].map_Kd
-			//load them once in the main function before mainloop
-			//bind them in display function here
-		}
-
-		glBegin(GL_TRIANGLES);
-		for (size_t j=0;j<3;++j)
-		{
-			//textex corrd. object->tList[object->faceList[i][j].t].ptr
-			glNormal3fv(object->nList[object->faceList[i][j].n].ptr);
-			glVertex3fv(object->vList[object->faceList[i][j].v].ptr);	
-		}
-		glEnd();
-	}
+	view->apply();
+	light->apply();
+	scene->apply();
 
 	glutSwapBuffers();
 }
@@ -109,3 +74,68 @@ void reshape(GLsizei w, GLsizei h)
 	windowSize[1] = h;
 }
 
+void keyboard(unsigned char key, int x, int y)
+{
+	Vec3d look_direction = view->vat - view->eye;
+	switch (key)
+	{
+	case 'w':
+		view->eye = view->eye + look_direction * sm->zoom_speed * look_direction.length();
+		std::cout << "Zoom in" << std::endl;
+		glutPostRedisplay();
+		break;
+	case 's':
+		view->eye = view->eye - look_direction * sm->zoom_speed * look_direction.length();
+		std::cout << "Zoom out" << std::endl;
+		glutPostRedisplay();
+		break;
+	case 'a':
+		view->rotation = (view->rotation + sm->rotate_speed) % 360;
+		std::cout << "Rotate left" << std::endl;
+		glutPostRedisplay();
+		break;
+	case 'd':
+		view->rotation = (view->rotation - sm->rotate_speed) % 360;
+		std::cout << "Rotate right" << std::endl;
+		glutPostRedisplay();
+		break;
+	default:
+		if ('1' <= key && key <= '9')
+		{
+			std::cout << "Select " << key << std::endl;
+			scene->select = key - '1';
+		}
+	}
+}
+
+void mouse(int button, int state, int x, int y)
+{
+	if (button == GLUT_LEFT_BUTTON)
+	{
+		if (state == GLUT_DOWN)
+		{
+			mouse_info.left_button_pressing = true;
+			mouse_info.x = x;
+			mouse_info.y = y;
+			std::cout << "left down at " << x << ' ' << y << std::endl;
+		}
+		else if (state == GLUT_UP)
+		{
+			mouse_info.left_button_pressing = false;
+			std::cout << "left up at " << x << ' ' << y << std::endl;
+		}
+	}
+}
+
+void motion(int x, int y)
+{
+	if (mouse_info.left_button_pressing && 0 <= scene->select && scene->select < scene->models.size())
+	{
+		scene->models[scene->select].translate[0] += sm->drag_speed * (x - mouse_info.x);
+		scene->models[scene->select].translate[1] -= sm->drag_speed * (y - mouse_info.y);
+		mouse_info.x = x;
+		mouse_info.y = y;
+		std::cout << "left moving at " << x << ' ' << y << std::endl;
+		glutPostRedisplay();
+	}
+}

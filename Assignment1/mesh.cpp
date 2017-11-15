@@ -1,19 +1,16 @@
-// mesh.cpp: implementation of the mesh class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#include "mesh.h"
 #include <iostream>
-
-const char* obj_database = "";	// 定義 mesh 的預設目錄
+#include <string>
+#include "Mesh.h"
 
 using namespace std;
+
+const string obj_database = "";	// 定義 Mesh 的預設目錄
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-mesh::mesh(const char* obj_file)
+Mesh::Mesh(const string &obj_file)
 {
 	mTotal = 0;		// mList[0] reserved for default meterial
 	vTotal = tTotal = nTotal = fTotal = 0;
@@ -21,17 +18,17 @@ mesh::mesh(const char* obj_file)
 	Init(obj_file);
 }
 
-mesh::mesh()
+Mesh::Mesh()
 {
 	mTotal = 0;			
 	vTotal = tTotal = nTotal = fTotal = 0;
 }
 
-mesh::~mesh()
+Mesh::~Mesh()
 {
 }
 
-void mesh::LoadMesh(string obj_file)
+void Mesh::LoadMesh(const string &obj_file)
 {
 	FILE	*scene;
 	char	token[100], buf[100], v[5][100];	// v[5] 表示一個 polygon 最多可以有 5個 vertex
@@ -45,11 +42,11 @@ void mesh::LoadMesh(string obj_file)
 
 	if (!scene) 
 	{
-		cout<< string("Can not open object File \"") << obj_file << "\" !" << endl;
+		cerr << "Can not open object File \"" << obj_file << "\" !" << endl;
 		return;
 	}
 
-	cout<<endl<<obj_file<<endl;
+	cout << obj_file << endl;
 		
 	while(!feof(scene))
 	{
@@ -66,7 +63,7 @@ void mesh::LoadMesh(string obj_file)
 			char mat_file[256];
 			matFile = mat_file;
   			fscanf(scene,"%s", mat_file);
-			LoadMtl(string(obj_database) + string(mat_file));
+			LoadMaterial(string(obj_database) + string(mat_file));
 		}
 
 		else if (!strcmp(token,"usemtl"))
@@ -98,9 +95,7 @@ void mesh::LoadMesh(string obj_file)
 			for (i=0;i<3;i++)		// face 預設為 3，假設一個 polygon 都只有 3 個 vertex
 			{
 				fscanf(scene,"%s",v[i]);
-				//printf("[%s]",v[i]);
 			}
-			//printf("\n");
 		  
 			Vertex	tmp_vertex[3];		// for faceList structure
 
@@ -152,7 +147,6 @@ void mesh::LoadMesh(string obj_file)
 		else if (!strcmp(token,"#"))	  // 註解
 			fgets(buf,100,scene);
 
-//		printf("[%s]\n",token);
 	}
 
 	if (scene) fclose(scene);
@@ -161,10 +155,12 @@ void mesh::LoadMesh(string obj_file)
 	nTotal = nList.size();
 	tTotal = tList.size();
 	fTotal = faceList.size();
-	printf("vetex: %d, normal: %d, texture: %d, triangles: %d\n",vTotal, nTotal, tTotal, fTotal);
+	cout << "vertex: " << vTotal << ", normal: " << nTotal;
+	cout << ", texture: " << tTotal << ", triangles: " << fTotal << endl;
+	cout << endl;
 }
 
-void mesh::LoadMtl(string tex_file)
+void Mesh::LoadMaterial(const string &tex_file)
 {
 	char	token[100], buf[100];
 	float	r,g,b;
@@ -189,7 +185,7 @@ void mesh::LoadMtl(string tex_file)
 		if (!strcmp(token,"newmtl"))
 		{
 			fscanf(fp_mtl,"%s",buf);
-			material newMtl;
+			Material newMtl;
 			mList.push_back(newMtl);
 			cur_mat = mTotal++;					// 從 mList[1] 開始，mList[0] 空下來給 default material 用
 			matMap[s_file+string("_")+string(buf)] = cur_mat; 	// matMap["material_name"] = material_id;
@@ -261,15 +257,14 @@ void mesh::LoadMtl(string tex_file)
 		else if (!strcmp(token,"#"))	  // 註解
 			fgets(buf,100,fp_mtl);
 
-//		printf("[%s]\n",token);
 	}
 
-	printf("total material:%d\n",matMap.size());
+	cout << "total material: " << matMap.size() << endl;
 
 	if (fp_mtl) fclose(fp_mtl);
 }
 
-void mesh::Init(const char* obj_file)
+void Mesh::Init(const string &obj_file)
 {
 	float default_value[3] = {1,1,1};
 
@@ -277,7 +272,7 @@ void mesh::Init(const char* obj_file)
 	nList.push_back(Vec3(default_value));	// 所以要先 push 一個 default value 到 vList[0],nList[0],tList[0]
 	tList.push_back(Vec3(default_value));
 
-	material defaultMtl;
+	Material defaultMtl;
 	mList.push_back(defaultMtl);
 	// 定義 default meterial: mList[0]
 	mList[0].Ka[0] = 0.0f; mList[0].Ka[1] = 0.0f; mList[0].Ka[2] = 0.0f; mList[0].Ka[3] = 1.0f; 
@@ -286,6 +281,6 @@ void mesh::Init(const char* obj_file)
 	mList[0].Ns = 32.0f;
 	mTotal++;
 
-	LoadMesh(string(obj_file));		// 讀入 .obj 檔 (可處理 Material)
+	LoadMesh(obj_file);		// 讀入 .obj 檔 (可處理 Material)
 }
 
