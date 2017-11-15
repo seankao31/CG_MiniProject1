@@ -1,13 +1,16 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <cmath>
 #include "glut.h"
+#include "Vec3d.h"
 
 
 class View
 {
 public:
-	GLdouble eye[3], vat[3], vup[3], fovy, dnear, dfar;
+	Vec3d eye, vat, vup;
+	GLdouble fovy, dnear, dfar;
 	int viewport[4];
 
 	View();

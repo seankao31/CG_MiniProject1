@@ -47,7 +47,7 @@ class Mesh
 			t = t_index;
 		}
 	};
-
+	
 	class Vec3		// vList, nList, tList ªº structure
 	{
 	public:
@@ -62,7 +62,7 @@ class Mesh
 			return ptr[index];
 		}
 	};
-
+	
 	class FACE			// faceList ªº structure
 	{
 	public:

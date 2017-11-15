@@ -20,6 +20,9 @@ View::~View()
 void View::Init(const string &view_file)
 {
 	LoadView(view_file);
+
+	cout << endl << endl << "TRY Vec3d" << endl;
+	cout << eye << endl << endl;
 }
 
 void View::LoadView(const string &view_file)
