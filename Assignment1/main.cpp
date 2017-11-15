@@ -89,6 +89,14 @@ void keyboard(unsigned char key, int x, int y)
 		std::cout << "Zoom out" << std::endl;
 		glutPostRedisplay();
 		break;
+	case 'a':
+		view->rotation = (view->rotation + 20) % 360;
+		glutPostRedisplay();
+		break;
+	case 'd':
+		view->rotation = (view->rotation - 20) % 360;
+		glutPostRedisplay();
+		break;
 	default:
 		if ('1' <= key && key <= '9')
 		{
