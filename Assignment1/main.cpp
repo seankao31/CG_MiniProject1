@@ -9,7 +9,7 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
-#define SCENE "test2"
+#define SCENE "test1"
 
 SceneManager *sm;
 Scene *scene;
@@ -62,11 +62,7 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//這行把畫面清成黑色並且清除z buffer
 
 	view->apply();
-	//glutReshapeWindow(windowSize[0], windowSize[1]);
-
-	//注意light位置的設定，要在gluLookAt之後
 	light->apply();
-
 	scene->apply();
 
 	glutSwapBuffers();
@@ -91,6 +87,16 @@ void keyboard(unsigned char key, int x, int y)
 	case 's':
 		view->eye = view->eye - look_direction * sm->zoom_speed * look_direction.length();
 		std::cout << "Zoom out" << std::endl;
+		glutPostRedisplay();
+		break;
+	case 'a':
+		view->rotation = (view->rotation + sm->rotate_speed) % 360;
+		std::cout << "Rotate left" << std::endl;
+		glutPostRedisplay();
+		break;
+	case 'd':
+		view->rotation = (view->rotation - sm->rotate_speed) % 360;
+		std::cout << "Rotate right" << std::endl;
 		glutPostRedisplay();
 		break;
 	default:
@@ -126,7 +132,7 @@ void motion(int x, int y)
 	if (mouse_info.left_button_pressing && 0 <= scene->select && scene->select < scene->models.size())
 	{
 		scene->models[scene->select].translate[0] += sm->drag_speed * (x - mouse_info.x);
-		scene->models[scene->select].translate[1] += sm->drag_speed * (y - mouse_info.y);
+		scene->models[scene->select].translate[1] -= sm->drag_speed * (y - mouse_info.y);
 		mouse_info.x = x;
 		mouse_info.y = y;
 		std::cout << "left moving at " << x << ' ' << y << std::endl;

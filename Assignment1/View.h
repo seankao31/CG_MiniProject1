@@ -12,6 +12,7 @@ public:
 	Vec3d eye, vat, vup;
 	GLdouble fovy, dnear, dfar;
 	int viewport[4];
+	int rotation;
 
 	View();
 	View(const std::string&);

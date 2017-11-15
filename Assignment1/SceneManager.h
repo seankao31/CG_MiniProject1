@@ -5,7 +5,8 @@ class SceneManager
 {
 public:
 	std::string view_file, light_file, scene_file;
-	double zoom_speed, rotate_speed, drag_speed;
+	double zoom_speed, drag_speed;
+	int rotate_speed;
 
 	SceneManager(const std::string&);
 	~SceneManager();

@@ -20,6 +20,7 @@ View::~View()
 void View::Init(const string &view_file)
 {
 	LoadView(view_file);
+	rotation = 0;
 }
 
 void View::LoadView(const string &view_file)
@@ -81,6 +82,7 @@ void View::apply()
 	gluLookAt(eye[0], eye[1], eye[2],// eye
 		vat[0], vat[1], vat[2],     // center
 		vup[0], vup[1], vup[2]);    // up
+	glRotatef(rotation, vup[0], vup[1], vup[2]);
 }
 
 void View::print()
