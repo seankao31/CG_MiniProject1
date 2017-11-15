@@ -19,7 +19,7 @@ Light::~Light()
 
 void Light::LoadLight(const string &light_file)
 {
-	fstream fin("light.light", fstream::in);
+	fstream fin(light_file, fstream::in);
 	string term;
 	while (fin >> term)
 	{

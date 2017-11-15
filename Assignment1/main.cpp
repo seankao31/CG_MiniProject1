@@ -4,25 +4,28 @@
 #include <vector>
 #include "mesh.h"
 #include "glut.h"
+#include "View.h"
 #include "Light.h"
 
 
 mesh *object;
-Light light("light.light");
+View *view;
+Light *light;
 
 int windowSize[2];
 
-void view();
 void display();
 void reshape(GLsizei , GLsizei );
 
 int main(int argc, char** argv)
 {
 	object = new mesh("box.obj");
+	view = new View("view.view");
+	light = new Light("light.light");
 
 	glutInit(&argc, argv);
-	glutInitWindowSize(500, 500);
-	glutInitWindowPosition(0, 0);
+	glutInitWindowSize(view->viewport[2] - view->viewport[0], view->viewport[3] - view->viewport[1]);
+	glutInitWindowPosition(view->viewport[0], view->viewport[1]);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutCreateWindow("Assignment1");
 	glutDisplayFunc(display);
@@ -30,70 +33,6 @@ int main(int argc, char** argv)
 	glutMainLoop();
 
 	return 0;
-}
-
-void view()
-{
-	GLdouble eye[3], vat[3], vup[3], fovy, dnear, dfar;
-	GLint viewport[4];
-
-	std::fstream fin("view.view", std::fstream::in);
-	std::string term;
-
-	while (fin >> term)
-	{
-		if (term == "eye")
-		{
-			fin >> eye[0] >> eye[1] >> eye[2];
-		}
-		else if (term == "vat")
-		{
-			fin >> vat[0] >> vat[1] >> vat[2];
-		}
-		else if (term == "vup")
-		{
-			fin >> vup[0] >> vup[1] >> vup[2];
-		}
-		else if (term == "fovy")
-		{
-			fin >> fovy;
-		}
-		else if (term == "dnear")
-		{
-			fin >> dnear;
-		}
-		else if (term == "dfar")
-		{
-			fin >> dfar;
-		}
-		else if (term == "viewport")
-		{
-			fin >> viewport[0] >> viewport[1] >> viewport[2] >> viewport[3];
-		}
-		else
-		{
-			std::cout << "view file error" << std::endl;
-		}
-	}
-	fin.close();
-
-	// viewport transformation
-	glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
-	glutReshapeWindow(viewport[2], viewport[3]);
-	// now cannot reshape window cause this is called every time display is called 
-	windowSize[0] = viewport[2];
-	windowSize[1] = viewport[3];
-
-	// projection transformation
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(fovy, (GLfloat)viewport[2] / (GLfloat)viewport[3], dnear, dfar);
-	// viewing and modeling transformation
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(eye[0], eye[1], eye[2],// eye
-		vat[0], vat[1], vat[2],     // center
-		vup[0], vup[1], vup[2]);    // up
 }
 
 void display()
@@ -105,10 +44,11 @@ void display()
 	glDepthFunc(GL_LEQUAL);                    // The Type Of Depth Test To Do
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//這行把畫面清成黑色並且清除z buffer
 
-	view();
+	view->apply();
+	glutReshapeWindow(windowSize[0], windowSize[1]);
 
 	//注意light位置的設定，要在gluLookAt之後
-	light.apply();
+	light->apply();
 
 	int lastMaterial = -1;
 	for(size_t i=0;i < object->fTotal;++i)
