@@ -11,12 +11,18 @@ SceneManager::SceneManager(const string &name = "test1")
 		view_file = "view.view";
 		light_file = "light.light";
 		scene_file = "scene.scene";
+		zoom_speed = 0.0001;
+		rotate_speed = 20;
+		drag_speed = 0.2;
 	}
 	else if (name == "test2")
 	{
 		view_file = "scene2.view";
 		light_file = "scene2.light";
 		scene_file = "scene2.scene";
+		zoom_speed = 0.005;
+		rotate_speed = 20;
+		drag_speed = 0.05;
 	}
 	else
 	{

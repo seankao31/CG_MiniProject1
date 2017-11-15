@@ -10,12 +10,8 @@
 #include "SceneManager.h"
 
 #define SCENE "test2"
-// 0.0001 for test1, 0.005 for test2
-#define ZOOM_SPEED 0.005
-// for test1, for test2
-#define ROTATE_SPEED 20
-#define DRAG_SPEED 0.05
 
+SceneManager *sm;
 Scene *scene;
 View *view;
 Light *light;
@@ -36,10 +32,10 @@ struct Mouse
 
 int main(int argc, char** argv)
 {
-	SceneManager sm(SCENE);
-	view = new View(sm.view_file);
-	light = new Light(sm.light_file);
-	scene = new Scene(sm.scene_file);
+	sm = new SceneManager(SCENE);
+	view = new View(sm->view_file);
+	light = new Light(sm->light_file);
+	scene = new Scene(sm->scene_file);
 
 	glutInit(&argc, argv);
 	glutInitWindowSize(view->viewport[2], view->viewport[3]);
@@ -88,12 +84,12 @@ void keyboard(unsigned char key, int x, int y)
 	switch (key)
 	{
 	case 'w':
-		view->eye = view->eye + look_direction * ZOOM_SPEED * look_direction.length();
+		view->eye = view->eye + look_direction * sm->zoom_speed * look_direction.length();
 		std::cout << "Zoom in" << std::endl;
 		glutPostRedisplay();
 		break;
 	case 's':
-		view->eye = view->eye - look_direction * ZOOM_SPEED * look_direction.length();
+		view->eye = view->eye - look_direction * sm->zoom_speed * look_direction.length();
 		std::cout << "Zoom out" << std::endl;
 		glutPostRedisplay();
 		break;
@@ -129,8 +125,8 @@ void motion(int x, int y)
 {
 	if (mouse_info.left_button_pressing && 0 <= scene->select && scene->select < scene->models.size())
 	{
-		scene->models[scene->select].translate[0] += x - mouse_info.x;
-		scene->models[scene->select].translate[1] += y - mouse_info.y;
+		scene->models[scene->select].translate[0] += sm->drag_speed * (x - mouse_info.x);
+		scene->models[scene->select].translate[1] += sm->drag_speed * (y - mouse_info.y);
 		mouse_info.x = x;
 		mouse_info.y = y;
 		std::cout << "left moving at " << x << ' ' << y << std::endl;
