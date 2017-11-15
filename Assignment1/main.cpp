@@ -78,6 +78,9 @@ void view()
 	// viewport transformation
 	glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
 	glutReshapeWindow(viewport[2], viewport[3]);
+	// now cannot reshape window cause this is called every time display is called 
+	windowSize[0] = viewport[2];
+	windowSize[1] = viewport[3];
 
 	// projection transformation
 	glMatrixMode(GL_PROJECTION);
