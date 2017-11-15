@@ -20,9 +20,10 @@ Scene::~Scene()
 void Scene::Init(const string& scene_file)
 {
 	LoadScene(scene_file);
+	cout << "Scene" << endl;
 	for (auto model : models)
 	{
-		mesh *object = new mesh(model.object_file);
+		Mesh *object = new Mesh(model.object_file);
 		objects.push_back(object);
 	}
 }
@@ -49,7 +50,6 @@ void Scene::LoadScene(const string& scene_file)
 		}
 	}
 	fin.close();
-	print();
 }
 
 void Scene::apply()
@@ -96,9 +96,3 @@ void Scene::apply()
 	}
 		
 }
-
-void Scene::print()
-{
-
-}
-

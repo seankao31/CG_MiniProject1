@@ -8,7 +8,7 @@ class View
 {
 public:
 	GLdouble eye[3], vat[3], vup[3], fovy, dnear, dfar;
-	GLint viewport[4];
+	int viewport[4];
 
 	View();
 	View(const std::string&);

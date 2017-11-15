@@ -2,7 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include "mesh.h"
+#include "Mesh.h"
 #include "glut.h"
 #include "View.h"
 #include "Light.h"

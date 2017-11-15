@@ -99,5 +99,5 @@ void Light::print()
 	cout << "Ambient" << endl;
 	for (int i = 0; i < 4; ++i)
 		cout << ambient[i] << ' ';
-	cout << endl;
+	cout << endl << endl;
 }

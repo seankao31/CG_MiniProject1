@@ -1,17 +1,11 @@
-// mesh.h: interface for the mesh class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#ifndef AFX_MESH_H_
-#define AFX_MESH_H_
-
-#include <stdio.h>
+#pragma once
 #include <stdlib.h>
+#include <iostream>
 #include <map>
 #include <vector>
 #include <string>
 
-class material
+class Material
 {
 public:
 	float Ka[4];		//ambient coefficient
@@ -27,7 +21,7 @@ public:
 	//This mtl loader is still incomplete
 	//Please see http://en.wikipedia.org/wiki/Wavefront_.obj_file#Material_template_library
 
-	material()
+	Material()
 	{ 
 		for (size_t i=0;i<4;i++)
 			Ka[i] = Kd[i] = Ks[i] = 1.0f;
@@ -36,7 +30,7 @@ public:
 	}
 };
 
-class mesh  
+class Mesh  
 {
 	class Vertex		// 儲存基本 vertex 的 property
 	{
@@ -88,7 +82,7 @@ class mesh
 		}
 	};
 
-	void	LoadMtl(std::string tex_file);
+	void	LoadMaterial(const std::string&);
 
 public:
 	/////////////////////////////////////////////////////////////////////////////
@@ -99,7 +93,7 @@ public:
 
 	size_t						mTotal;	// total material 
 	std::map<std::string,size_t>matMap;		// matMap[material_name] = material_ID
-	std::vector<material>		mList;		// material ID (每個 mesh 最多有 100 種 material)	
+	std::vector<Material>		mList;		// material ID (每個 mesh 最多有 100 種 material)	
 
 	std::vector<Vec3>			vList;		// Vertex List (Position) - world cord.
 	std::vector<Vec3>			nList;		// Normal List
@@ -108,17 +102,15 @@ public:
 
 	size_t	vTotal, tTotal, nTotal, fTotal; // number of total vertice, faces, texture coord., normal vecters, and faces
 
-	void	LoadMesh(std::string scene_file);
+	void	LoadMesh(const std::string&);
 	
-	mesh();
-	mesh(const std::string &obj_file);
-	virtual ~mesh();
+	Mesh();
+	Mesh(const std::string&);
+	virtual ~Mesh();
 
-	void Init(const std::string &obj_file);
+	void Init(const std::string&);
 
 private:
 	FILE		*fp_mtl;
 	std::string	s_file;
 };
-
-#endif

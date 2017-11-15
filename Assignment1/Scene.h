@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include "glut.h"
-#include "mesh.h"
+#include "Mesh.h"
 
 class Scene
 {
@@ -20,7 +20,7 @@ class Scene
 
 public:
 	std::vector<Model> models;
-	std::vector<mesh*> objects;
+	std::vector<Mesh*> objects;
 
 	Scene();
 	Scene(const std::string&);
@@ -29,6 +29,5 @@ public:
 	void Init(const std::string&);
 	void LoadScene(const std::string&);
 	void apply();
-	void print();
 };
 
