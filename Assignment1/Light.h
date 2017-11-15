@@ -1,7 +1,8 @@
 #pragma once
-#include "glut.h"
 #include <string>
 #include <vector>
+#include "glut.h"
+
 class Light
 {
 	class LIGHT
@@ -13,6 +14,7 @@ class Light
 		GLfloat specular[4] = { 1.0 };
 
 		LIGHT() {};
+		~LIGHT() {};
 	};
 
 public:

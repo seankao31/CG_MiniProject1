@@ -1,6 +1,6 @@
-#include "Light.h"
 #include <fstream>
 #include <iostream>
+#include "Light.h"
 
 using namespace std;
 
@@ -55,7 +55,7 @@ void Light::apply()
 	// enable lighting
 	glEnable(GL_LIGHTING);
 	// set light property
-	for (auto i = 0; i < lights.size(); ++i)
+	for (size_t i = 0; i < lights.size(); ++i)
 	{
 		glEnable(GL_LIGHT0 + i);
 		glLightfv(GL_LIGHT0 + i, GL_POSITION, lights[i].position);

@@ -2,8 +2,8 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "mesh.h"
 #include <iostream>
+#include "mesh.h"
 
 const char* obj_database = "";	// 定義 mesh 的預設目錄
 

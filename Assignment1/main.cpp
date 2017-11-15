@@ -1,13 +1,14 @@
-#include "mesh.h"
-#include "glut.h"
-#include "Light.h"
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
+#include "mesh.h"
+#include "glut.h"
+#include "Light.h"
+
 
 mesh *object;
-Light light;
+Light light("light.light");
 
 int windowSize[2];
 
