@@ -7,7 +7,9 @@
 #include "View.h"
 #include "Light.h"
 #include "Scene.h"
+#include "SceneManager.h"
 
+#define SCENE "test2"
 
 Scene *scene;
 View *view;
@@ -20,9 +22,10 @@ void reshape(GLsizei , GLsizei );
 
 int main(int argc, char** argv)
 {
-	view = new View("view.view");
-	light = new Light("light.light");
-	scene = new Scene("scene.scene");
+	SceneManager sm(SCENE);
+	view = new View(sm.view_file);
+	light = new Light(sm.light_file);
+	scene = new Scene(sm.scene_file);
 
 	glutInit(&argc, argv);
 	glutInitWindowSize(view->viewport[2] - view->viewport[0], view->viewport[3] - view->viewport[1]);
