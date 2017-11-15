@@ -13,7 +13,6 @@ Light::Light()
 {
 }
 
-
 Light::~Light()
 {
 }
@@ -46,8 +45,30 @@ void Light::LoadLight(const string &light_file)
 	print();
 }
 
+void Light::apply()
+{
+	glShadeModel(GL_SMOOTH);
+
+	// z buffer enable
+	glEnable(GL_DEPTH_TEST);
+
+	// enable lighting
+	glEnable(GL_LIGHTING);
+	// set light property
+	for (auto i = 0; i < lights.size(); ++i)
+	{
+		glEnable(GL_LIGHT0 + i);
+		glLightfv(GL_LIGHT0 + i, GL_POSITION, lights[i].position);
+		glLightfv(GL_LIGHT0 + i, GL_DIFFUSE, lights[i].diffuse);
+		glLightfv(GL_LIGHT0 + i, GL_SPECULAR, lights[i].specular);
+		glLightfv(GL_LIGHT0 + i, GL_AMBIENT, lights[i].ambient);
+	}
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
+}
+
 void Light::print()
 {
+	cout << lights.size() << " light(s)" << endl;
 	for (auto light : lights)
 	{
 		cout << "Light" << endl;

@@ -1,15 +1,16 @@
 #include "mesh.h"
 #include "glut.h"
+#include "Light.h"
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 
 mesh *object;
+Light light;
 
 int windowSize[2];
 
-void light();
 void view();
 void display();
 void reshape(GLsizei , GLsizei );
@@ -94,61 +95,6 @@ void view()
 		vup[0], vup[1], vup[2]);    // up
 }
 
-typedef struct LIGHT
-{
-	GLfloat position[4] = { 1.0 };
-	GLfloat ambient[4] = { 1.0 };
-	GLfloat diffuse[4] = { 1.0 };
-	GLfloat specular[4] = { 1.0 };
-} LIGHT;
-
-void light()
-{
-	std::fstream fin("light.light", std::fstream::in);
-	std::string term;
-	std::vector<LIGHT> lights;
-	GLfloat ambient[4] = { 1.0 };
-	while (fin >> term)
-	{
-		if (term == "light")
-		{
-			LIGHT light;
-			fin >> light.position[0] >> light.position[1] >> light.position[2];
-			fin >> light.ambient[0] >> light.ambient[1] >> light.ambient[2];
-			fin >> light.diffuse[0] >> light.diffuse[1] >> light.diffuse[2];
-			fin >> light.specular[0] >> light.specular[1] >> light.specular[2];
-			lights.push_back(light);
-		}
-		else if (term == "ambient")
-		{
-			fin >> ambient[0] >> ambient[1] >> ambient[2];
-		}
-		else
-		{
-			std::cout << "light file error" << std::endl;
-		}
-	}
-	fin.close();
-
-	glShadeModel(GL_SMOOTH);
-
-	// z buffer enable
-	glEnable(GL_DEPTH_TEST);
-
-	// enable lighting
-	glEnable(GL_LIGHTING);
-	// set light property
-	for (int i = 0; i < lights.size(); ++i)
-	{
-		glEnable(GL_LIGHT0 + i);
-		glLightfv(GL_LIGHT0 + i, GL_POSITION, lights[i].position);
-		glLightfv(GL_LIGHT0 + i, GL_DIFFUSE, lights[i].diffuse);
-		glLightfv(GL_LIGHT0 + i, GL_SPECULAR, lights[i].specular);
-		glLightfv(GL_LIGHT0 + i, GL_AMBIENT, lights[i].ambient);
-	}
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
-}
-
 void display()
 {
 	// clear the buffer
@@ -161,7 +107,7 @@ void display()
 	view();
 
 	//注意light位置的設定，要在gluLookAt之後
-	light();
+	light.apply();
 
 	int lastMaterial = -1;
 	for(size_t i=0;i < object->fTotal;++i)

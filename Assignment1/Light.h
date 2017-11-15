@@ -25,5 +25,6 @@ public:
 
 	void LoadLight(const std::string&);
 	void print();
+	void apply();
 };
 
