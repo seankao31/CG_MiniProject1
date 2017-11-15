@@ -4,7 +4,7 @@
 
 using namespace std;
 
-const string obj_database = "";	// 定義 Mesh 的預設目錄
+const string obj_database = "";
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
