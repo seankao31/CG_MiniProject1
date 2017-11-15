@@ -90,7 +90,6 @@ void Scene::apply()
 			}
 			glEnd();
 
-
 			glPopMatrix();
 		}
 	}

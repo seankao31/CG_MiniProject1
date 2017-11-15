@@ -9,7 +9,7 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
-#define SCENE "test2"
+#define SCENE "test1"
 
 SceneManager *sm;
 Scene *scene;
@@ -90,11 +90,13 @@ void keyboard(unsigned char key, int x, int y)
 		glutPostRedisplay();
 		break;
 	case 'a':
-		view->rotation = (view->rotation + 20) % 360;
+		view->rotation = (view->rotation + sm->rotate_speed) % 360;
+		std::cout << "Rotate left" << std::endl;
 		glutPostRedisplay();
 		break;
 	case 'd':
-		view->rotation = (view->rotation - 20) % 360;
+		view->rotation = (view->rotation - sm->rotate_speed) % 360;
+		std::cout << "Rotate right" << std::endl;
 		glutPostRedisplay();
 		break;
 	default:
