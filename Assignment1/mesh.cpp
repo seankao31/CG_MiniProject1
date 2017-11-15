@@ -3,6 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include <iostream>
+#include <string>
 #include "mesh.h"
 
 const char* obj_database = "";	// 定義 mesh 的預設目錄
@@ -13,7 +14,7 @@ using namespace std;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-mesh::mesh(const char* obj_file)
+mesh::mesh(const string &obj_file)
 {
 	mTotal = 0;		// mList[0] reserved for default meterial
 	vTotal = tTotal = nTotal = fTotal = 0;
@@ -269,7 +270,7 @@ void mesh::LoadMtl(string tex_file)
 	if (fp_mtl) fclose(fp_mtl);
 }
 
-void mesh::Init(const char* obj_file)
+void mesh::Init(const string &obj_file)
 {
 	float default_value[3] = {1,1,1};
 

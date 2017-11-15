@@ -58,7 +58,8 @@ void View::LoadView(const string &view_file)
 		}
 		else
 		{
-			std::cout << "view file error" << std::endl;
+			cerr << "View: load file error" << endl;
+			return;
 		}
 	}
 	fin.close();

@@ -25,8 +25,9 @@ public:
 	Light(const std::string&);
 	~Light();
 
+	void Init(const std::string&);
 	void LoadLight(const std::string&);
-	void print();
 	void apply();
+	void print();
 };
 

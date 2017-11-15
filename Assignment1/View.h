@@ -16,7 +16,7 @@ public:
 
 	void Init(const std::string&);
 	void LoadView(const std::string&);
-	void print();
 	void apply();
+	void print();
 };
 

@@ -17,6 +17,11 @@ Light::~Light()
 {
 }
 
+void Light::Init(const string &light_file)
+{
+	LoadLight(light_file);
+}
+
 void Light::LoadLight(const string &light_file)
 {
 	fstream fin(light_file, fstream::in);
@@ -38,7 +43,8 @@ void Light::LoadLight(const string &light_file)
 		}
 		else
 		{
-			cout << "light file error" << endl;
+			cout << "Light: load file error" << endl;
+			return;
 		}
 	}
 	fin.close();

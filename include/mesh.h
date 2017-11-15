@@ -111,10 +111,10 @@ public:
 	void	LoadMesh(std::string scene_file);
 	
 	mesh();
-	mesh(const char* obj_file);
+	mesh(const std::string &obj_file);
 	virtual ~mesh();
 
-	void Init(const char* obj_file);
+	void Init(const std::string &obj_file);
 
 private:
 	FILE		*fp_mtl;

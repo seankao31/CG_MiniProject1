@@ -6,9 +6,10 @@
 #include "glut.h"
 #include "View.h"
 #include "Light.h"
+#include "Scene.h"
 
 
-mesh *object;
+Scene *scene;
 View *view;
 Light *light;
 
@@ -19,9 +20,9 @@ void reshape(GLsizei , GLsizei );
 
 int main(int argc, char** argv)
 {
-	object = new mesh("box.obj");
 	view = new View("view.view");
 	light = new Light("light.light");
+	scene = new Scene("scene.scene");
 
 	glutInit(&argc, argv);
 	glutInitWindowSize(view->viewport[2] - view->viewport[0], view->viewport[3] - view->viewport[1]);
@@ -50,43 +51,7 @@ void display()
 	//注意light位置的設定，要在gluLookAt之後
 	light->apply();
 
-	int lastMaterial = -1;
-	for(size_t i=0;i < object->fTotal;++i)
-	{
-		// set material property if this face used different material
-		if(lastMaterial != object->faceList[i].m)
-		{
-			lastMaterial = (int)object->faceList[i].m;
-			glMaterialfv(GL_FRONT, GL_AMBIENT  , object->mList[lastMaterial].Ka);
-			glMaterialfv(GL_FRONT, GL_DIFFUSE  , object->mList[lastMaterial].Kd);
-			glMaterialfv(GL_FRONT, GL_SPECULAR , object->mList[lastMaterial].Ks);
-			glMaterialfv(GL_FRONT, GL_SHININESS, &object->mList[lastMaterial].Ns);
-
-			//you can obtain the texture name by object->mList[lastMaterial].map_Kd
-			//load them once in the main function before mainloop
-			//bind them in display function here
-		}
-
-		glMatrixMode(GL_MODELVIEW);
-		
-		glPushMatrix();
-
-		glTranslatef(-200.0, 0.0, 0.0);
-		glRotatef(0.0, 0.0, 1.0, 0.0);
-		glScalef(1.0, 1.0, 1.0);
-		
-		glBegin(GL_TRIANGLES);
-		for (size_t j=0;j<3;++j)
-		{
-			//textex corrd. object->tList[object->faceList[i][j].t].ptr
-			glNormal3fv(object->nList[object->faceList[i][j].n].ptr);
-			glVertex3fv(object->vList[object->faceList[i][j].v].ptr);	
-		}
-		glEnd();
-
-
-		glPopMatrix();
-	}
+	scene->apply();
 
 	glutSwapBuffers();
 }
