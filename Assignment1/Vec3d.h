@@ -13,6 +13,8 @@ public:
 
 	const Vec3d operator+(const Vec3d&) const;
 	const Vec3d operator-(const Vec3d&) const;
+	const Vec3d operator*(const double&) const;
+	const Vec3d operator/(const double&) const;
 	friend std::ostream& operator<<(std::ostream&, const Vec3d&);
 	GLdouble& operator[](size_t);
 	GLdouble length();

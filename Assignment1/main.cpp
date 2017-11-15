@@ -10,6 +10,10 @@
 #include "SceneManager.h"
 
 #define SCENE "test1"
+// 0.00005 for test1, 0.005 for test2
+#define ZOOM_SPEED 0.00005
+// for test1, for test2
+#define ROTATE_SPEED 20
 
 Scene *scene;
 View *view;
@@ -19,7 +23,7 @@ int windowSize[2];
 
 void display();
 void reshape(GLsizei, GLsizei);
-//void keyboard(unsigned char, int, int);
+void keyboard(unsigned char, int, int);
 
 int main(int argc, char** argv)
 {
@@ -35,7 +39,7 @@ int main(int argc, char** argv)
 	glutCreateWindow("Assignment1");
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
-	//glutKeyboardFunc(keyboard);
+	glutKeyboardFunc(keyboard);
 	glutMainLoop();
 
 	return 0;
@@ -66,15 +70,20 @@ void reshape(GLsizei w, GLsizei h)
 	windowSize[0] = w;
 	windowSize[1] = h;
 }
-/*
+
 void keyboard(unsigned char key, int x, int y)
 {
+	Vec3d look_direction = view->vat - view->eye;
 	switch (key)
 	{
 	case 'w':
-
+		view->eye = view->eye + look_direction * ZOOM_SPEED * look_direction.length();
+		glutPostRedisplay();
+		break;
 	case 's':
+		view->eye = view->eye - look_direction * ZOOM_SPEED * look_direction.length();
+		glutPostRedisplay();
 		break;
 	}
 }
-*/
+

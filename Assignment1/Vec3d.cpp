@@ -34,6 +34,28 @@ const Vec3d Vec3d::operator-(const Vec3d &rhs) const
 	return vec3d;
 }
 
+const Vec3d Vec3d::operator*(const double &rhs) const
+{
+	Vec3d vec3d;
+	vec3d.ptr[0] = this->ptr[0] * rhs;
+	vec3d.ptr[1] = this->ptr[1] * rhs;
+	vec3d.ptr[2] = this->ptr[2] * rhs;
+	return vec3d;
+}
+const Vec3d Vec3d::operator/(const double &rhs) const
+{
+	if (rhs == 0)
+	{
+		cerr << "divided by 0 error" << endl;
+		return *this;
+	}
+	Vec3d vec3d;
+	vec3d.ptr[0] = this->ptr[0] / rhs;
+	vec3d.ptr[1] = this->ptr[1] / rhs;
+	vec3d.ptr[2] = this->ptr[2] / rhs;
+	return vec3d;
+}
+
 ostream& operator<<(ostream& os, const Vec3d &vec3d)
 {
 	os << vec3d.ptr[0] << ' ' << vec3d.ptr[1] << ' ' << vec3d.ptr[2];
