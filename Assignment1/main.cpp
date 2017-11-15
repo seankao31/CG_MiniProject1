@@ -1,5 +1,6 @@
 #include "mesh.h"
 #include "glut.h"
+#include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -9,6 +10,7 @@ mesh *object;
 int windowSize[2];
 
 void light();
+void view();
 void display();
 void reshape(GLsizei , GLsizei );
 
@@ -28,6 +30,66 @@ int main(int argc, char** argv)
 	return 0;
 }
 
+void view()
+{
+	GLdouble eye[3], vat[3], vup[3], fovy, dnear, dfar;
+	GLint viewport[4];
+
+	std::fstream fin("view.view", std::fstream::in);
+	std::string term;
+
+	while (fin >> term)
+	{
+		if (term == "eye")
+		{
+			fin >> eye[0] >> eye[1] >> eye[2];
+		}
+		else if (term == "vat")
+		{
+			fin >> vat[0] >> vat[1] >> vat[2];
+		}
+		else if (term == "vup")
+		{
+			fin >> vup[0] >> vup[1] >> vup[2];
+		}
+		else if (term == "fovy")
+		{
+			fin >> fovy;
+		}
+		else if (term == "dnear")
+		{
+			fin >> dnear;
+		}
+		else if (term == "dfar")
+		{
+			fin >> dfar;
+		}
+		else if (term == "viewport")
+		{
+			fin >> viewport[0] >> viewport[1] >> viewport[2] >> viewport[3];
+		}
+		else
+		{
+			std::cout << "view file error" << std::endl;
+		}
+	}
+	fin.close();
+
+	// viewport transformation
+	glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+
+	// projection transformation
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(fovy, (GLfloat)viewport[2] / (GLfloat)viewport[3], dnear, dfar);
+	// viewing and modeling transformation
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(eye[0], eye[1], eye[2],// eye
+		vat[0], vat[1], vat[2],     // center
+		vup[0], vup[1], vup[2]);    // up
+}
+
 typedef struct LIGHT
 {
 	GLfloat position[4] = { 1.0 };
@@ -42,7 +104,7 @@ void light()
 	std::string term;
 	std::vector<LIGHT> lights;
 	GLfloat ambient[4] = { 1.0 };
-	while(fin >> term)
+	while (fin >> term)
 	{
 		if (term == "light")
 		{
@@ -57,7 +119,12 @@ void light()
 		{
 			fin >> ambient[0] >> ambient[1] >> ambient[2];
 		}
+		else
+		{
+			std::cout << "light file error" << std::endl;
+		}
 	}
+	fin.close();
 
 	glShadeModel(GL_SMOOTH);
 
@@ -87,19 +154,7 @@ void display()
 	glDepthFunc(GL_LEQUAL);                    // The Type Of Depth Test To Do
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//這行把畫面清成黑色並且清除z buffer
 
-	// viewport transformation
-	glViewport(0, 0, windowSize[0], windowSize[1]);
-
-	// projection transformation
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(60.0, (GLfloat)windowSize[0]/(GLfloat)windowSize[1], 1.0, 1000.0);
-	// viewing and modeling transformation
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(	200.0, 300.0, 150.0,// eye
-				0.0, 0.0, 0.0,     // center
-				0.0, 1.0, 0.0);    // up
+	view();
 
 	//注意light位置的設定，要在gluLookAt之後
 	light();
