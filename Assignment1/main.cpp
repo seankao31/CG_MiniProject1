@@ -22,7 +22,7 @@ int main(int argc, char** argv)
 	glutInitWindowSize(500, 500);
 	glutInitWindowPosition(0, 0);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	glutCreateWindow("Mesh Example");
+	glutCreateWindow("Assignment1");
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 	glutMainLoop();
@@ -77,6 +77,7 @@ void view()
 
 	// viewport transformation
 	glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+	glutReshapeWindow(viewport[2], viewport[3]);
 
 	// projection transformation
 	glMatrixMode(GL_PROJECTION);
@@ -176,6 +177,14 @@ void display()
 			//bind them in display function here
 		}
 
+		glMatrixMode(GL_MODELVIEW);
+		
+		glPushMatrix();
+
+		glTranslatef(-200.0, 0.0, 0.0);
+		glRotatef(0.0, 0.0, 1.0, 0.0);
+		glScalef(1.0, 1.0, 1.0);
+		
 		glBegin(GL_TRIANGLES);
 		for (size_t j=0;j<3;++j)
 		{
@@ -184,6 +193,9 @@ void display()
 			glVertex3fv(object->vList[object->faceList[i][j].v].ptr);	
 		}
 		glEnd();
+
+
+		glPopMatrix();
 	}
 
 	glutSwapBuffers();
