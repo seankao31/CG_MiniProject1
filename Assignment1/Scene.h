@@ -31,5 +31,6 @@ public:
 	void Init(const std::string&);
 	void LoadScene(const std::string&);
 	void apply();
+	void Select(int);
 };
 

@@ -95,3 +95,15 @@ void Scene::apply()
 	}
 		
 }
+
+void Scene::Select(int id)
+{
+	if (0 <= id && id < models.size())
+	{
+		select = id;
+	}
+	else
+	{
+		select = -1;
+	}
+}

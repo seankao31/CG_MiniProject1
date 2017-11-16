@@ -9,7 +9,7 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
-#define SCENE "test1"
+#define SCENE "test2"
 
 SceneManager *sm;
 Scene *scene;
@@ -33,13 +33,10 @@ struct Mouse
 int main(int argc, char** argv)
 {
 	sm = new SceneManager(SCENE);
-	view = new View(sm->view_file);
-	light = new Light(sm->light_file);
-	scene = new Scene(sm->scene_file);
 
 	glutInit(&argc, argv);
-	glutInitWindowSize(view->viewport[2], view->viewport[3]);
-	glutInitWindowPosition(view->viewport[0], view->viewport[1]);
+	glutInitWindowSize(sm->view->viewport[2], sm->view->viewport[3]);
+	glutInitWindowPosition(sm->view->viewport[0], sm->view->viewport[1]);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutCreateWindow("Assignment1");
 	glutDisplayFunc(display);
@@ -61,9 +58,9 @@ void display()
 	glDepthFunc(GL_LEQUAL);                    // The Type Of Depth Test To Do
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//這行把畫面清成黑色並且清除z buffer
 
-	view->apply();
-	light->apply();
-	scene->apply();
+	sm->view->apply();
+	sm->light->apply();
+	sm->scene->apply();
 
 	glutSwapBuffers();
 }
@@ -76,34 +73,29 @@ void reshape(GLsizei w, GLsizei h)
 
 void keyboard(unsigned char key, int x, int y)
 {
-	Vec3d look_direction = view->vat - view->eye;
+	Vec3d look_direction = sm->view->vat - sm->view->eye;
 	switch (key)
 	{
 	case 'w':
-		view->eye = view->eye + look_direction * sm->zoom_speed * look_direction.length();
-		std::cout << "Zoom in" << std::endl;
+		sm->CameraZoomIn();
 		glutPostRedisplay();
 		break;
 	case 's':
-		view->eye = view->eye - look_direction * sm->zoom_speed * look_direction.length();
-		std::cout << "Zoom out" << std::endl;
+		sm->CameraZoomOut();
 		glutPostRedisplay();
 		break;
 	case 'a':
-		view->rotation = (view->rotation + sm->rotate_speed) % 360;
-		std::cout << "Rotate left" << std::endl;
+		sm->CameraRotateLeft();
 		glutPostRedisplay();
 		break;
 	case 'd':
-		view->rotation = (view->rotation - sm->rotate_speed) % 360;
-		std::cout << "Rotate right" << std::endl;
+		sm->CameraRotateRight();
 		glutPostRedisplay();
 		break;
 	default:
 		if ('1' <= key && key <= '9')
 		{
-			std::cout << "Select " << key << std::endl;
-			scene->select = key - '1';
+			sm->SelectObject(key);
 		}
 	}
 }
@@ -117,25 +109,21 @@ void mouse(int button, int state, int x, int y)
 			mouse_info.left_button_pressing = true;
 			mouse_info.x = x;
 			mouse_info.y = y;
-			std::cout << "left down at " << x << ' ' << y << std::endl;
 		}
 		else if (state == GLUT_UP)
 		{
 			mouse_info.left_button_pressing = false;
-			std::cout << "left up at " << x << ' ' << y << std::endl;
 		}
 	}
 }
 
 void motion(int x, int y)
 {
-	if (mouse_info.left_button_pressing && 0 <= scene->select && scene->select < scene->models.size())
+	if (mouse_info.left_button_pressing)
 	{
-		scene->models[scene->select].translate[0] += sm->drag_speed * (x - mouse_info.x);
-		scene->models[scene->select].translate[1] -= sm->drag_speed * (y - mouse_info.y);
+		sm->ObjectTranslate(x - mouse_info.x, y - mouse_info.y);
 		mouse_info.x = x;
 		mouse_info.y = y;
-		std::cout << "left moving at " << x << ' ' << y << std::endl;
 		glutPostRedisplay();
 	}
 }
