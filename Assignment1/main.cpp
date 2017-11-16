@@ -76,6 +76,10 @@ void keyboard(unsigned char key, int x, int y)
 	Vec3d look_direction = sm->view->vat - sm->view->eye;
 	switch (key)
 	{
+	case 'r':
+		sm->Reset();
+		glutPostRedisplay();
+		break;
 	case 'w':
 		sm->CameraZoomIn();
 		glutPostRedisplay();

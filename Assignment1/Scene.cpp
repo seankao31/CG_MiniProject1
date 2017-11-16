@@ -77,6 +77,7 @@ void Scene::apply()
 
 			glPushMatrix();
 
+			glTranslatef(model.additional_translate[0], model.additional_translate[1], model.additional_translate[2]);
 			glTranslatef(model.translate[0], model.translate[1], model.translate[2]);
 			glRotatef(model.rotate[0], model.rotate[1], model.rotate[2], model.rotate[3]);
 			glScalef(model.scale[0], model.scale[1], model.scale[2]);

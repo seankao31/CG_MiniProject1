@@ -13,10 +13,25 @@ class Scene
 		GLfloat scale[3];
 		GLfloat rotate[4];
 		GLfloat translate[4];
+		GLfloat additional_translate[4];
 		Mesh *object;
 
-		Model() {};
+		Model()
+		{
+			for (size_t i = 0; i < 4; ++i)
+			{
+				additional_translate[i] = 0;
+			}
+		}
 		~Model() {};
+
+		void reset()
+		{
+			for (size_t i = 0; i < 4; ++i)
+			{
+				additional_translate[i] = 0;
+			}
+		}
 	};
 
 public:

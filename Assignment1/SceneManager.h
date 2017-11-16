@@ -18,6 +18,7 @@ public:
 	~SceneManager();
 
 	void Init();
+	void Reset();
 	void CameraZoomIn();
 	void CameraZoomOut();
 	void CameraRotateLeft();

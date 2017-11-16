@@ -13,6 +13,7 @@ public:
 	GLdouble fovy, dnear, dfar;
 	int viewport[4];
 	int rotation;
+	Vec3d zoom;
 
 	View();
 	View(const std::string&);

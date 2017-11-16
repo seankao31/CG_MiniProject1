@@ -44,17 +44,27 @@ void SceneManager::Init()
 	scene = new Scene(scene_file);
 }
 
+void SceneManager::Reset()
+{
+	view->zoom.clear();
+	view->rotation = 0;
+	for (auto &model : scene->models)
+	{
+		model.reset();
+	}
+}
+
 void SceneManager::CameraZoomIn()
 {
-	Vec3d look_direction = view->vat - view->eye;
-	view->eye = view->eye + look_direction * zoom_speed * look_direction.length();
+	Vec3d look_direction = view->vat - view->eye - view->zoom;
+	view->zoom = view->zoom + look_direction * zoom_speed * look_direction.length();
 	std::cout << "Zoom in" << std::endl;
 }
 
 void SceneManager::CameraZoomOut()
 {
-	Vec3d look_direction = view->vat - view->eye;
-	view->eye = view->eye - look_direction * zoom_speed * look_direction.length();
+	Vec3d look_direction = view->vat - view->eye - view->zoom;
+	view->zoom = view->zoom - look_direction * zoom_speed * look_direction.length();
 	std::cout << "Zoom out" << std::endl;
 }
 
@@ -88,8 +98,8 @@ void SceneManager::ObjectTranslate(int delta_x, int delta_y)
 {
 	if (scene->select >= 0)
 	{
-		scene->models[scene->select].translate[0] += drag_speed * delta_x;
-		scene->models[scene->select].translate[1] -= drag_speed * delta_y;
+		scene->models[scene->select].additional_translate[0] += drag_speed * delta_x;
+		scene->models[scene->select].additional_translate[1] -= drag_speed * delta_y;
 		cout << "Object " << scene->select + 1 << " translated " << delta_x << ", " << delta_y << endl;
 	}
 }

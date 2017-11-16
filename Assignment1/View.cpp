@@ -79,10 +79,21 @@ void View::apply()
 	// viewing and modeling transformation
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	// either this: start
+	/*
+	gluLookAt(Vec3d(eye+zoom)[0], Vec3d(eye+zoom)[1], Vec3d(eye+zoom)[2],// eye
+		vat[0], vat[1], vat[2],     // center
+		vup[0], vup[1], vup[2]);    // up
+	*/
+	// end
+	// or this: start
 	gluLookAt(eye[0], eye[1], eye[2],// eye
 		vat[0], vat[1], vat[2],     // center
 		vup[0], vup[1], vup[2]);    // up
-	glRotatef(rotation, vup[0], vup[1], vup[2]);
+	glTranslatef(-zoom[0], -zoom[1], -zoom[2]); // camera zoom in / out
+	// end
+	// would work
+	glRotatef(rotation, vup[0], vup[1], vup[2]); // rotate the camera about viewing center
 }
 
 void View::print()

@@ -4,12 +4,18 @@ using namespace std;
 
 Vec3d::Vec3d(GLdouble *v)
 {
-	for (size_t i = 0; i<3; i++)
+	for (size_t i = 0; i < 3; ++i)
+	{
 		ptr[i] = v[i];
+	}
 }
 
 Vec3d::Vec3d()
 {
+	for (size_t i = 0; i < 3; ++i)
+	{
+		ptr[i] = 0;
+	}
 }
 
 Vec3d::~Vec3d()
@@ -70,6 +76,14 @@ GLdouble& Vec3d::operator[](size_t index)
 GLdouble Vec3d::length()
 {
 	return sqrt(pow(ptr[0], 2) + pow(ptr[1], 2) + pow(ptr[2], 2));
+}
+
+void Vec3d::clear()
+{
+	for (size_t i = 0; i < 3; ++i)
+	{
+		ptr[i] = 0;
+	}
 }
 
 GLdouble dot(Vec3d lhs, Vec3d rhs)
