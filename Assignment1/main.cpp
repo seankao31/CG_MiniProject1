@@ -12,9 +12,6 @@
 #define SCENE "test2"
 
 SceneManager *sm;
-Scene *scene;
-View *view;
-Light *light;
 
 int windowSize[2];
 
@@ -58,10 +55,7 @@ void display()
 	glDepthFunc(GL_LEQUAL);                    // The Type Of Depth Test To Do
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//這行把畫面清成黑色並且清除z buffer
 
-	sm->view->apply();
-	sm->light->apply();
-	sm->scene->apply();
-
+	sm->Render();
 	glutSwapBuffers();
 }
 

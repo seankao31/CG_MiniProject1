@@ -21,6 +21,7 @@ void View::Init(const string &view_file)
 {
 	LoadView(view_file);
 	rotation = 0;
+	zoom.clear();
 }
 
 void View::LoadView(const string &view_file)
@@ -64,10 +65,10 @@ void View::LoadView(const string &view_file)
 		}
 	}
 	fin.close();
-	print();
+	Print();
 }
 
-void View::apply()
+void View::Apply()
 {
 	// viewport transformation
 	glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
@@ -96,7 +97,7 @@ void View::apply()
 	glRotatef(rotation, vup[0], vup[1], vup[2]); // rotate the camera about viewing center
 }
 
-void View::print()
+void View::Print()
 {
 	cout << "View" << endl;
 	cout << "eye: ";

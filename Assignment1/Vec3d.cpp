@@ -48,6 +48,7 @@ const Vec3d Vec3d::operator*(const double &rhs) const
 	vec3d.ptr[2] = this->ptr[2] * rhs;
 	return vec3d;
 }
+
 const Vec3d Vec3d::operator/(const double &rhs) const
 {
 	if (rhs == 0)

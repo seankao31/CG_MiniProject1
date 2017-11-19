@@ -18,6 +18,7 @@ public:
 	~SceneManager();
 
 	void Init();
+	void Render();
 	void Reset();
 	void CameraZoomIn();
 	void CameraZoomOut();

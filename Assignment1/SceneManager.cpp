@@ -44,13 +44,20 @@ void SceneManager::Init()
 	scene = new Scene(scene_file);
 }
 
+void SceneManager::Render()
+{
+	view->Apply();
+	light->Apply();
+	scene->Apply();
+}
+
 void SceneManager::Reset()
 {
 	view->zoom.clear();
 	view->rotation = 0;
 	for (auto &model : scene->models)
 	{
-		model.reset();
+		model.Reset();
 	}
 }
 
@@ -86,20 +93,21 @@ void SceneManager::SelectObject(int key)
 	cout << "Select " << key - '0';
 	if (scene->select >= 0)
 	{
-		cout << " successed" << endl;
+		cout << " success" << endl;
 	}
 	else
 	{
-		cout << " failed" << endl;
+		cout << " fail" << endl;
 	}
 }
 
-void SceneManager::ObjectTranslate(int delta_x, int delta_y)
+void SceneManager::ObjectTranslate(int delta_x, int neg_delta_y)
 {
 	if (scene->select >= 0)
 	{
+		int delta_y = -neg_delta_y;
 		scene->models[scene->select].additional_translate[0] += drag_speed * delta_x;
-		scene->models[scene->select].additional_translate[1] -= drag_speed * delta_y;
+		scene->models[scene->select].additional_translate[1] += drag_speed * delta_y;
 		cout << "Object " << scene->select + 1 << " translated " << delta_x << ", " << delta_y << endl;
 	}
 }

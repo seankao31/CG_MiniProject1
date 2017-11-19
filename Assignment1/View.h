@@ -21,7 +21,7 @@ public:
 
 	void Init(const std::string&);
 	void LoadView(const std::string&);
-	void apply();
-	void print();
+	void Apply();
+	void Print();
 };
 
