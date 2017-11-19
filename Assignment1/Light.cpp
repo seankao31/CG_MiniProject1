@@ -48,10 +48,10 @@ void Light::LoadLight(const string &light_file)
 		}
 	}
 	fin.close();
-	print();
+	Print();
 }
 
-void Light::apply()
+void Light::Apply()
 {
 	glShadeModel(GL_SMOOTH);
 
@@ -72,7 +72,7 @@ void Light::apply()
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
 }
 
-void Light::print()
+void Light::Print()
 {
 	cout << lights.size() << " light(s)" << endl;
 	for (auto light : lights)
