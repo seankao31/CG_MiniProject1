@@ -7,8 +7,8 @@ using namespace std;
 
 #define SCENE 0
 //#define ONE
-//#define TWO
-#define TEST
+#define TWO
+//#define DEMO
 
 SceneManager::SceneManager()
 {
@@ -40,7 +40,7 @@ void SceneManager::Init()
 void SceneManager::LoadTestScenes()
 {
 	TEST_SCENE test_scene;
-#ifdef TEST
+#ifdef DEMO
 	test_scene.view = new View("park.view");
 	test_scene.light = new Light("park.light");
 	test_scene.scene = new Scene("park2.scene");

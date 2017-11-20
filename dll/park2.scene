@@ -2,6 +2,8 @@ single-texture Fountain_diffuse.bmp
 model littlefountain.obj 1.0 1.0 1.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0
 single-texture water.png
 model water.obj 1.0 4.0 1.0 45.0 0.0 1.0 0.0 0.0 2.0 0.0
+multi-texture grass.bmp GroundLightMap.bmp
+model groundv2.obj  1.0 1.0 1.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0
 single-texture skybox2048x2048.bmp
 model skybox.obj 1.0 1.0 1.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0
 single-texture hedge.bmp

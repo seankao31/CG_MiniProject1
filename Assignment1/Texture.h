@@ -43,3 +43,19 @@ public:
 	void DisapplyTexture();
 	void SetTexCoord(float*);
 };
+
+class MultiTexture : public Texture
+{
+public:
+	std::string file_name[2];
+	unsigned int texObject[2];
+
+	MultiTexture(const std::string&, const std::string&);
+	MultiTexture();
+	~MultiTexture();
+
+	void LoadTexture();
+	void ApplyTexture();
+	void DisapplyTexture();
+	void SetTexCoord(float*);
+};

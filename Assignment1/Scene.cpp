@@ -66,8 +66,10 @@ void Scene::LoadScene(const string& scene_file)
 		}
 		else if (term == "multi-texture")
 		{
-			// TODO
-			fin >> term >> term;
+			string file1, file2;
+			fin >> file1 >> file2;
+			texture_index = tm.textures.size();
+			tm.textures.push_back(new MultiTexture(file1, file2));
 		}
 		else if (term == "cube-map")
 		{
