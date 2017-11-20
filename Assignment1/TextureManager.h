@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include <string>
-#include <unordered_map>
 #include "FreeImage.h"
 #include "glew.h"
 #include "glut.h"
@@ -13,7 +12,7 @@ private:
 	TextureManager();
 public:
 
-	std::vector<Texture> textures;
+	std::vector<Texture*> textures;
 
 	~TextureManager();
 

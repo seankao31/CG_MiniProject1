@@ -23,12 +23,6 @@ void Scene::Init(const string& scene_file)
 	TextureManager& tm = TextureManager::GetInstance();
 	select = -1;
 	LoadScene(scene_file);
-	cout << "Texture Names" << endl;
-	for (auto t : tm.textures)
-	{
-		cout << t.file_name << endl;
-	}
-	cout << endl;
 	cout << "Scene" << endl;
 	for (auto &model : models)
 	{
@@ -42,7 +36,8 @@ void Scene::LoadScene(const string& scene_file)
 	fstream fin(scene_file, fstream::in);
 	string term;
 
-	size_t texture_index;
+	size_t texture_index = 0;
+	tm.textures.push_back(new NoTexture());
 
 	while (fin >> term)
 	{
@@ -60,12 +55,14 @@ void Scene::LoadScene(const string& scene_file)
 		}
 		else if (term == "no-texture")
 		{
+			texture_index = tm.textures.size();
+			tm.textures.push_back(new NoTexture());
 		}
 		else if (term == "single-texture")
 		{
 			fin >> term;
 			texture_index = tm.textures.size();
-			tm.textures.push_back(Texture(term));
+			tm.textures.push_back(new SingleTexture(term));
 		}
 		else if (term == "multi-texture")
 		{

@@ -3,11 +3,6 @@
 
 using namespace std;
 
-Texture::Texture(const string &name)
-{
-	file_name = name;
-}
-
 Texture::Texture()
 {
 }
@@ -16,13 +11,51 @@ Texture::~Texture()
 {
 }
 
-void Texture::LoadTexture()
+NoTexture::NoTexture()
+{
+}
+
+NoTexture::~NoTexture()
+{
+}
+
+void NoTexture::LoadTexture()
+{
+}
+
+void NoTexture::ApplyTexture()
+{
+}
+
+void NoTexture::DisapplyTexture()
+{
+}
+
+void NoTexture::SetTexCoord(float *point)
+{
+}
+
+
+SingleTexture::SingleTexture(const string &name)
+{
+	file_name = name;
+}
+
+SingleTexture::SingleTexture()
+{
+}
+
+SingleTexture::~SingleTexture()
+{
+}
+
+void SingleTexture::LoadTexture()
 {
 	glGenTextures(1, texObject);
 	FIBITMAP *pImage = FreeImage_Load(FreeImage_GetFileType(file_name.c_str(), 0), file_name.c_str());
 	FIBITMAP *p32BitsImage = FreeImage_ConvertTo32Bits(pImage);
-	iWidth = FreeImage_GetWidth(p32BitsImage);
-	iHeight = FreeImage_GetHeight(p32BitsImage);
+	int iWidth = FreeImage_GetWidth(p32BitsImage);
+	int iHeight = FreeImage_GetHeight(p32BitsImage);
 
 	glBindTexture(GL_TEXTURE_2D, texObject[0]);
 
@@ -44,7 +77,7 @@ void Texture::LoadTexture()
 	FreeImage_Unload(pImage);
 }
 
-void Texture::ApplyTexture()
+void SingleTexture::ApplyTexture()
 {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texObject[0]);
@@ -53,13 +86,13 @@ void Texture::ApplyTexture()
 	glAlphaFunc(GL_GREATER, 0.5f);
 }
 
-void Texture::DisapplyTexture()
+void SingleTexture::DisapplyTexture()
 {
 	glDisable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::SetTexCoord(float *point)
+void SingleTexture::SetTexCoord(float *point)
 {
 	glTexCoord2f(point[0], point[1]);
 }

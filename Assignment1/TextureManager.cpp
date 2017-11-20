@@ -9,6 +9,11 @@ TextureManager::TextureManager()
 
 TextureManager::~TextureManager()
 {
+	for (auto it = textures.begin(); it != textures.end(); ++it)
+	{
+		delete (*it);
+	}
+	textures.clear();
 }
 
 TextureManager& TextureManager::GetInstance()
@@ -22,7 +27,7 @@ void TextureManager::LoadTextures()
 	FreeImage_Initialise();
 	for (auto &texture : textures)
 	{
-		texture.LoadTexture();
+		texture->LoadTexture();
 	}
 	FreeImage_DeInitialise();
 }

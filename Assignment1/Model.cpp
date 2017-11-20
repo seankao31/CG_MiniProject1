@@ -70,13 +70,13 @@ void Model::TRStransform()
 void Model::ApplyTexture()
 {
 	TextureManager& tm = TextureManager::GetInstance();
-	tm.textures[texture_index].ApplyTexture();
+	tm.textures[texture_index]->ApplyTexture();
 }
 
 void Model::DisapplyTexture()
 {
 	TextureManager& tm = TextureManager::GetInstance();
-	tm.textures[texture_index].DisapplyTexture();
+	tm.textures[texture_index]->DisapplyTexture();
 }
 
 void Model::DrawFace(int face)
@@ -86,7 +86,7 @@ void Model::DrawFace(int face)
 	for (size_t i = 0; i<3; ++i)
 	{
 		float *point = object->tList[object->faceList[face][i].t].ptr;
-		tm.textures[texture_index].SetTexCoord(point);
+		tm.textures[texture_index]->SetTexCoord(point);
 		glTexCoord2f(point[0], point[1]);
 		glNormal3fv(object->nList[object->faceList[face][i].n].ptr);
 		glVertex3fv(object->vList[object->faceList[face][i].v].ptr);
