@@ -16,7 +16,7 @@ public:
 	GLfloat additional_translate[4];
 	Mesh *object;
 
-	std::string texture_file;
+	size_t texture_index;
 
 	Model();
 	~Model();

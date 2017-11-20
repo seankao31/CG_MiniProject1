@@ -19,16 +19,12 @@ Texture::~Texture()
 void Texture::LoadTexture()
 {
 	glGenTextures(1, texObject);
-	cout << "texObject for " << file_name << ": " << texObject[0] << endl;
 	FIBITMAP *pImage = FreeImage_Load(FreeImage_GetFileType(file_name.c_str(), 0), file_name.c_str());
 	FIBITMAP *p32BitsImage = FreeImage_ConvertTo32Bits(pImage);
 	iWidth = FreeImage_GetWidth(p32BitsImage);
 	iHeight = FreeImage_GetHeight(p32BitsImage);
 
 	glBindTexture(GL_TEXTURE_2D, texObject[0]);
-
-	/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);*/
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, iWidth, iHeight, 0,
 		GL_BGRA, GL_UNSIGNED_BYTE, (void*)FreeImage_GetBits(p32BitsImage));

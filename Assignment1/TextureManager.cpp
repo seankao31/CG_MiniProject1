@@ -20,9 +20,9 @@ TextureManager& TextureManager::GetInstance()
 void TextureManager::LoadTextures()
 {
 	FreeImage_Initialise();
-	for (size_t i = 0; i < textures.size(); ++i)
+	for (auto &texture : textures)
 	{
-		textures[i].LoadTexture();
+		texture.LoadTexture();
 	}
 	FreeImage_DeInitialise();
 }

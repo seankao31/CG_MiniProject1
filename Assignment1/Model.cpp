@@ -27,7 +27,6 @@ void Model::Reset()
 void Model::Render()
 {
 	int lastMaterial = -1;
-	unsigned int lastTexture = -1;
 	for (size_t i = 0; i < object->fTotal; ++i)
 	{
 		// set material property if this face used different material
@@ -41,12 +40,6 @@ void Model::Render()
 
 		glPushMatrix();
 		TRStransform();
-		/*if (texture->texObject[0] != lastTexture)
-		{
-			lastTexture = texture->texObject[0]; // cant multi tex
-			DisapplyTexture();
-			ApplyTexture();
-		}*/
 		ApplyTexture();
 		DrawFace(i);
 		glPopMatrix();
@@ -77,13 +70,13 @@ void Model::TRStransform()
 void Model::ApplyTexture()
 {
 	TextureManager& tm = TextureManager::GetInstance();
-	tm.textures[tm.file_to_index[texture_file]].ApplyTexture();
+	tm.textures[texture_index].ApplyTexture();
 }
 
 void Model::DisapplyTexture()
 {
 	TextureManager& tm = TextureManager::GetInstance();
-	tm.textures[tm.file_to_index[texture_file]].DisapplyTexture();
+	tm.textures[texture_index].DisapplyTexture();
 }
 
 void Model::DrawFace(int face)
@@ -93,7 +86,7 @@ void Model::DrawFace(int face)
 	for (size_t i = 0; i<3; ++i)
 	{
 		float *point = object->tList[object->faceList[face][i].t].ptr;
-		tm.textures[tm.file_to_index[texture_file]].SetTexCoord(point);
+		tm.textures[texture_index].SetTexCoord(point);
 		glTexCoord2f(point[0], point[1]);
 		glNormal3fv(object->nList[object->faceList[face][i].n].ptr);
 		glVertex3fv(object->vList[object->faceList[face][i].v].ptr);

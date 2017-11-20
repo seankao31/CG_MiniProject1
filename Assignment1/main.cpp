@@ -12,14 +12,8 @@
 #include "SceneManager.h"
 #include "TextureManager.h"
 
-/*
-#define NUM_TEXTURE 1
-unsigned int texObject[NUM_TEXTURE];
-*/
 int windowSize[2];
-/*
-void LoadTexture(char* pFilename);
-*/
+
 void display();
 void reshape(GLsizei, GLsizei);
 void keyboard(unsigned char, int, int);
@@ -44,12 +38,6 @@ int main(int argc, char** argv)
 	glutCreateWindow("Assignment1");
 	glewInit();
 	tm.LoadTextures();
-	/*
-	FreeImage_Initialise();
-	glGenTextures(NUM_TEXTURE, texObject);
-	LoadTexture("check_old.bmp");
-	FreeImage_DeInitialise();
-	*/
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
