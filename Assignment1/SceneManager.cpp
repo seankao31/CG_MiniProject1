@@ -5,9 +5,14 @@
 
 using namespace std;
 
-SceneManager::SceneManager(int test)
+#define SCENE 0
+//#define ONE
+//#define TWO
+#define TEST
+
+SceneManager::SceneManager()
 {
-	test_state = test;
+	test_state = SCENE;
 	Init();
 }
 
@@ -15,9 +20,9 @@ SceneManager::~SceneManager()
 {
 }
 
-SceneManager& SceneManager::GetInstance(int test = 1)
+SceneManager& SceneManager::GetInstance()
 {
-	static SceneManager instance(test);
+	static SceneManager instance;
 	return instance;
 }
 
@@ -35,7 +40,17 @@ void SceneManager::Init()
 void SceneManager::LoadTestScenes()
 {
 	TEST_SCENE test_scene;
+#ifdef TEST
+	test_scene.view = new View("park.view");
+	test_scene.light = new Light("park.light");
+	test_scene.scene = new Scene("park2.scene");
+	test_scene.zoom_speed = 0.005;
+	test_scene.rotate_speed = 10;
+	test_scene.drag_speed = 0.05;
 
+	test_scenes.push_back(test_scene);
+#endif
+#ifdef ONE
 	test_scene.view = new View("view.view");
 	test_scene.light = new Light("light.light");
 	test_scene.scene = new Scene("scene.scene");
@@ -53,6 +68,26 @@ void SceneManager::LoadTestScenes()
 	test_scene.drag_speed = 0.05;
 
 	test_scenes.push_back(test_scene);
+#endif
+#ifdef TWO
+	test_scene.view = new View("park.view");
+	test_scene.light = new Light("park.light");
+	test_scene.scene = new Scene("park.scene");
+	test_scene.zoom_speed = 0.005;
+	test_scene.rotate_speed = 10;
+	test_scene.drag_speed = 0.05;
+
+	test_scenes.push_back(test_scene);
+
+	test_scene.view = new View("Chess.view");
+	test_scene.light = new Light("Chess.light");
+	test_scene.scene = new Scene("Chess.scene");
+	test_scene.zoom_speed = 0.005;
+	test_scene.rotate_speed = 10;
+	test_scene.drag_speed = 0.05;
+
+	test_scenes.push_back(test_scene);
+#endif
 }
 
 void SceneManager::ToggleTestScene()
@@ -69,6 +104,7 @@ void SceneManager::ToggleTestScene()
 	{
 		glDisable(GL_LIGHT0 + i);
 	}
+	cout << "Scene Toggled" << endl;
 	glutReshapeWindow(view->viewport[2], view->viewport[3]);
 }
 

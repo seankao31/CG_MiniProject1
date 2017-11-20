@@ -1,7 +1,10 @@
 #pragma once
 #include <cmath>
 #include <iostream>
+#include "FreeImage.h"
+#include "glew.h"
 #include "glut.h"
+
 class Vec3d
 {
 public:

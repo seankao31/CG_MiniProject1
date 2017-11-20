@@ -3,16 +3,23 @@
 #include <string>
 #include <vector>
 #include "Mesh.h"
+#include "FreeImage.h"
+#include "glew.h"
 #include "glut.h"
 #include "View.h"
 #include "Light.h"
 #include "Scene.h"
 #include "SceneManager.h"
+#include "TextureManager.h"
 
-#define SCENE 1
-
+/*
+#define NUM_TEXTURE 1
+unsigned int texObject[NUM_TEXTURE];
+*/
 int windowSize[2];
-
+/*
+void LoadTexture(char* pFilename);
+*/
 void display();
 void reshape(GLsizei, GLsizei);
 void keyboard(unsigned char, int, int);
@@ -25,15 +32,23 @@ struct Mouse
 	int x, y;
 } mouse_info;
 
-SceneManager& sm = SceneManager::GetInstance(SCENE);
+SceneManager& sm = SceneManager::GetInstance();
+TextureManager& tm = TextureManager::GetInstance();
 
 int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
 	glutInitWindowSize(sm.view->viewport[2], sm.view->viewport[3]);
 	glutInitWindowPosition(sm.view->viewport[0], sm.view->viewport[1]);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutCreateWindow("Assignment1");
+	glewInit();
+	/*
+	FreeImage_Initialise();
+	glGenTextures(NUM_TEXTURE, texObject);
+	LoadTexture("check_old.bmp");
+	FreeImage_DeInitialise();
+	*/
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);

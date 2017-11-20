@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include "Scene.h"
+#include "TextureManager.h"
 
 using namespace std;
 
@@ -19,8 +20,15 @@ Scene::~Scene()
 
 void Scene::Init(const string& scene_file)
 {
+	TextureManager& tm = TextureManager::GetInstance();
 	select = -1;
 	LoadScene(scene_file);
+	cout << "Texture Names" << endl;
+	for (auto t : tm.textures)
+	{
+		cout << t.file_name << endl;
+	}
+	cout << endl;
 	cout << "Scene" << endl;
 	for (auto &model : models)
 	{
@@ -30,8 +38,12 @@ void Scene::Init(const string& scene_file)
 
 void Scene::LoadScene(const string& scene_file)
 {
+	TextureManager& tm = TextureManager::GetInstance();
 	fstream fin(scene_file, fstream::in);
 	string term;
+
+	string texture_file_name;
+
 	while (fin >> term)
 	{
 		if (term == "model")
@@ -41,7 +53,29 @@ void Scene::LoadScene(const string& scene_file)
 			fin >> model.scale[0] >> model.scale[1] >> model.scale[2];
 			fin >> model.rotate[0] >> model.rotate[1] >> model.rotate[2] >> model.rotate[3];
 			fin >> model.translate[0] >> model.translate[1] >> model.translate[2];
+
+			model.texture = tm.textures.back();
+
 			models.push_back(model);
+		}
+		else if (term == "no-texture")
+		{
+		}
+		else if (term == "single-texture")
+		{
+			fin >> texture_file_name;
+			Texture t(texture_file_name);
+			tm.textures.push_back(t);
+		}
+		else if (term == "multi-texture")
+		{
+			// TODO
+			fin >> term >> term;
+		}
+		else if (term == "cube-map")
+		{
+			// TODO
+			fin >> term >> term >> term >> term >> term >> term;
 		}
 		else
 		{

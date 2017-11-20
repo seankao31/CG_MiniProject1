@@ -21,7 +21,7 @@ class SceneManager
 	};
 
 private:
-	SceneManager(int);
+	SceneManager();
 
 public:
 	std::vector<TEST_SCENE> test_scenes;
@@ -35,7 +35,7 @@ public:
 
 	~SceneManager();
 
-	static SceneManager& GetInstance(int);
+	static SceneManager& GetInstance();
 	SceneManager(SceneManager const&) = delete;
 	void operator=(SceneManager const&) = delete;
 

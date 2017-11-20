@@ -36,6 +36,7 @@ void Model::Render()
 
 		glPushMatrix();
 		TRStransform();
+		ApplyTexture();
 		DrawFace(i);
 		glPopMatrix();
 	}
@@ -59,6 +60,16 @@ void Model::TRStransform()
 	glTranslatef(translate[0], translate[1], translate[2]);
 	glRotatef(rotate[0], rotate[1], rotate[2], rotate[3]);
 	glScalef(scale[0], scale[1], scale[2]);
+}
+
+void Model::ApplyTexture()
+{
+
+}
+
+void Model::DisapplyTexture()
+{
+
 }
 
 void Model::DrawFace(int face)
