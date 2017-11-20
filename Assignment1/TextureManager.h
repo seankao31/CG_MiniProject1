@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include <string>
+#include <unordered_map>
 #include "FreeImage.h"
 #include "glew.h"
 #include "glut.h"
@@ -12,6 +14,7 @@ private:
 public:
 
 	std::vector<Texture> textures;
+	std::unordered_map<std::string, size_t> file_to_index;
 
 	~TextureManager();
 

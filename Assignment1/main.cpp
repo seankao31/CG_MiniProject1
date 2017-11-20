@@ -43,6 +43,7 @@ int main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutCreateWindow("Assignment1");
 	glewInit();
+	tm.LoadTextures();
 	/*
 	FreeImage_Initialise();
 	glGenTextures(NUM_TEXTURE, texObject);

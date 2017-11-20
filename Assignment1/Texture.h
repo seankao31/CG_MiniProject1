@@ -18,5 +18,6 @@ public:
 	void LoadTexture();
 	void ApplyTexture();
 	void DisapplyTexture();
+	void SetTexCoord(float*);
 };
 

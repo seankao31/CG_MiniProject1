@@ -1,6 +1,7 @@
+#include <iostream>
 #include "TextureManager.h"
 
-
+using namespace std;
 
 TextureManager::TextureManager()
 {
@@ -19,9 +20,9 @@ TextureManager& TextureManager::GetInstance()
 void TextureManager::LoadTextures()
 {
 	FreeImage_Initialise();
-	for (auto texture : textures)
+	for (size_t i = 0; i < textures.size(); ++i)
 	{
-		texture.LoadTexture();
+		textures[i].LoadTexture();
 	}
 	FreeImage_DeInitialise();
 }

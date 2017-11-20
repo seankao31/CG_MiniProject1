@@ -54,8 +54,8 @@ void Scene::LoadScene(const string& scene_file)
 			fin >> model.rotate[0] >> model.rotate[1] >> model.rotate[2] >> model.rotate[3];
 			fin >> model.translate[0] >> model.translate[1] >> model.translate[2];
 
-			model.texture = tm.textures.back();
-
+			model.texture_file = texture_file_name;
+			
 			models.push_back(model);
 		}
 		else if (term == "no-texture")
@@ -66,6 +66,7 @@ void Scene::LoadScene(const string& scene_file)
 			fin >> texture_file_name;
 			Texture t(texture_file_name);
 			tm.textures.push_back(t);
+			tm.file_to_index.insert({texture_file_name, tm.textures.size()-1});
 		}
 		else if (term == "multi-texture")
 		{
