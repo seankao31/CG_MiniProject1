@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "FreeImage.h"
+#include "glew.h"
 #include "glut.h"
 
 class Light

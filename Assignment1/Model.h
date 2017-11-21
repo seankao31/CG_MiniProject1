@@ -1,7 +1,10 @@
 #pragma once
 #include <string>
+#include "FreeImage.h"
+#include "glew.h"
 #include "glut.h"
 #include "Mesh.h"
+#include "Texture.h"
 
 class Model
 {
@@ -13,6 +16,8 @@ public:
 	GLfloat additional_translate[4];
 	Mesh *object;
 
+	size_t texture_index;
+
 	Model();
 	~Model();
 
@@ -22,5 +27,7 @@ public:
 private:
 	void ApplyMaterial(int);
 	void TRStransform();
+	void ApplyTexture();
+	void DisapplyTexture();
 	void DrawFace(int);
 };

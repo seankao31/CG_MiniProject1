@@ -31,15 +31,20 @@ void Light::LoadLight(const string &light_file)
 		if (term == "light")
 		{
 			LIGHT light;
-			fin >> light.position[0] >> light.position[1] >> light.position[2];
-			fin >> light.ambient[0] >> light.ambient[1] >> light.ambient[2];
-			fin >> light.diffuse[0] >> light.diffuse[1] >> light.diffuse[2];
-			fin >> light.specular[0] >> light.specular[1] >> light.specular[2];
+			for (size_t i = 0; i < 3; ++i)
+				fin >> light.position[i];
+			for (size_t i = 0; i < 3; ++i)
+				fin >> light.ambient[i];
+			for (size_t i = 0; i < 3; ++i)
+				fin >> light.diffuse[i];
+			for (size_t i = 0; i < 3; ++i)
+				fin >> light.specular[i];
 			lights.push_back(light);
 		}
 		else if (term == "ambient")
 		{
-			fin >> ambient[0] >> ambient[1] >> ambient[2];
+			for (size_t i = 0; i < 3; ++i)
+				fin >> ambient[i];
 		}
 		else
 		{

@@ -1,4 +1,8 @@
+#include <iostream>
 #include "Model.h"
+#include "TextureManager.h"
+
+using namespace std;
 
 Model::Model()
 {
@@ -36,8 +40,10 @@ void Model::Render()
 
 		glPushMatrix();
 		TRStransform();
+		ApplyTexture();
 		DrawFace(i);
 		glPopMatrix();
+		DisapplyTexture();
 	}
 }
 
@@ -61,12 +67,26 @@ void Model::TRStransform()
 	glScalef(scale[0], scale[1], scale[2]);
 }
 
+void Model::ApplyTexture()
+{
+	TextureManager& tm = TextureManager::GetInstance();
+	tm.textures[texture_index]->ApplyTexture();
+}
+
+void Model::DisapplyTexture()
+{
+	TextureManager& tm = TextureManager::GetInstance();
+	tm.textures[texture_index]->DisapplyTexture();
+}
+
 void Model::DrawFace(int face)
 {
+	TextureManager& tm = TextureManager::GetInstance();
 	glBegin(GL_TRIANGLES);
 	for (size_t i = 0; i<3; ++i)
 	{
-		//textex corrd. object->tList[object->faceList[face][i].t].ptr
+		float *point = object->tList[object->faceList[face][i].t].ptr;
+		tm.textures[texture_index]->SetTexCoord(point);
 		glNormal3fv(object->nList[object->faceList[face][i].n].ptr);
 		glVertex3fv(object->vList[object->faceList[face][i].v].ptr);
 	}
