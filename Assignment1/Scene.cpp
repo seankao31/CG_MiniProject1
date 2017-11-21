@@ -73,8 +73,14 @@ void Scene::LoadScene(const string& scene_file)
 		}
 		else if (term == "cube-map")
 		{
-			// TODO
-			fin >> term >> term >> term >> term >> term >> term;
+			vector<string> files;
+			for (size_t i = 0; i < 6; ++i)
+			{
+				fin >> term;
+				files.push_back(term);
+			}
+			texture_index = tm.textures.size();
+			tm.textures.push_back(new CubeMapTexture(files));
 		}
 		else
 		{

@@ -87,7 +87,6 @@ void Model::DrawFace(int face)
 	{
 		float *point = object->tList[object->faceList[face][i].t].ptr;
 		tm.textures[texture_index]->SetTexCoord(point);
-		//glTexCoord2f(point[0], point[1]);
 		glNormal3fv(object->nList[object->faceList[face][i].n].ptr);
 		glVertex3fv(object->vList[object->faceList[face][i].v].ptr);
 	}

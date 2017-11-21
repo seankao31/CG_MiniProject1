@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include "FreeImage.h"
 #include "glew.h"
 #include "glut.h"
@@ -13,7 +14,7 @@ public:
 	virtual void LoadTexture() = 0;
 	virtual void ApplyTexture() = 0;
 	virtual void DisapplyTexture() = 0;
-	virtual void SetTexCoord(float *point = NULL) = 0;
+	virtual void SetTexCoord(float *point) = 0;
 };
 
 class NoTexture : public Texture
@@ -58,4 +59,20 @@ public:
 	void ApplyTexture();
 	void DisapplyTexture();
 	void SetTexCoord(float*);
+};
+
+class CubeMapTexture : public Texture
+{
+public:
+	std::vector<std::string> file_names;
+	unsigned int texObject[1];
+
+	CubeMapTexture(const std::vector<std::string>&);
+	CubeMapTexture();
+	~CubeMapTexture();
+
+	void LoadTexture();
+	void ApplyTexture();
+	void DisapplyTexture();
+	void SetTexCoord(float *point = NULL);
 };
