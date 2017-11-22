@@ -51,6 +51,7 @@ SingleTexture::~SingleTexture()
 void SingleTexture::LoadTexture()
 {
 	glGenTextures(1, texObject);
+
 	FIBITMAP *pImage = FreeImage_Load(FreeImage_GetFileType(file_name.c_str(), 0), file_name.c_str());
 	FIBITMAP *p32BitsImage = FreeImage_ConvertTo32Bits(pImage);
 	int iWidth = FreeImage_GetWidth(p32BitsImage);
@@ -60,19 +61,18 @@ void SingleTexture::LoadTexture()
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, iWidth, iHeight, 0,
 		GL_BGRA, GL_UNSIGNED_BYTE, (void*)FreeImage_GetBits(p32BitsImage));
+
+	FreeImage_Unload(p32BitsImage);
+	FreeImage_Unload(pImage);
 	
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	
 	/*
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, baseLevel);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, maxLevel);
 	*/
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-
-	FreeImage_Unload(p32BitsImage);
-	FreeImage_Unload(pImage);
 }
 
 void SingleTexture::ApplyTexture()
@@ -124,18 +124,17 @@ void MultiTexture::LoadTexture()
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, iWidth, iHeight, 0,
 			GL_BGRA, GL_UNSIGNED_BYTE, (void*)FreeImage_GetBits(p32BitsImage));
 
+		FreeImage_Unload(p32BitsImage);
+		FreeImage_Unload(pImage);
+
 		glGenerateMipmap(GL_TEXTURE_2D);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-
 		/*
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, baseLevel);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, maxLevel);
 		*/
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-
-		FreeImage_Unload(p32BitsImage);
-		FreeImage_Unload(pImage);
 	}
 }
 
@@ -192,6 +191,7 @@ CubeMapTexture::~CubeMapTexture()
 void CubeMapTexture::LoadTexture()
 {
 	glGenTextures(1, texObject);
+
 	FIBITMAP *pImage;
 	FIBITMAP *p32BitsImage;
 	int iWidth;
@@ -208,20 +208,19 @@ void CubeMapTexture::LoadTexture()
 		// pos_x, neg_x, pos_y, neg_y, pos_z, neg_z are consecutive numbers
 		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA8, iWidth, iHeight, 0,
 			GL_BGRA, GL_UNSIGNED_BYTE, (void*)FreeImage_GetBits(p32BitsImage));
+
+		FreeImage_Unload(p32BitsImage);
+		FreeImage_Unload(pImage);
 	}
 
 	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-
-	/* if these are needed, should not be GL_TEXTURE_2D
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, baseLevel);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, maxLevel);
+	/*
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, baseLevel);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, maxLevel);
 	*/
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-
-	FreeImage_Unload(p32BitsImage);
-	FreeImage_Unload(pImage);
 }
 
 void CubeMapTexture::ApplyTexture()

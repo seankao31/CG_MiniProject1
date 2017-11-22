@@ -6,7 +6,7 @@
 using namespace std;
 
 #define SCENE 0
-//#define ONE
+#define ONE
 #define TWO
 //#define DEMO
 
@@ -104,7 +104,7 @@ void SceneManager::ToggleTestScene()
 	{
 		glDisable(GL_LIGHT0 + i);
 	}
-	cout << "Scene Toggled" << endl;
+	cout << "Toggle Scene" << endl;
 	glutReshapeWindow(view->viewport[2], view->viewport[3]);
 }
 
@@ -123,20 +123,22 @@ void SceneManager::Reset()
 	{
 		model.Reset();
 	}
+	cout << "Reset Scene" << endl;
+	glutReshapeWindow(view->viewport[2], view->viewport[3]);
 }
 
 void SceneManager::CameraZoomIn()
 {
 	Vec3d look_direction = view->vat - view->eye - view->zoom;
 	view->zoom = view->zoom + look_direction * zoom_speed * look_direction.length();
-	std::cout << "Zoom in" << std::endl;
+	cout << "Zoom in" << endl;
 }
 
 void SceneManager::CameraZoomOut()
 {
 	Vec3d look_direction = view->vat - view->eye - view->zoom;
 	view->zoom = view->zoom - look_direction * zoom_speed * look_direction.length();
-	std::cout << "Zoom out" << std::endl;
+	cout << "Zoom out" << endl;
 }
 
 void SceneManager::CameraRotateLeft()
