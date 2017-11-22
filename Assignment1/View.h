@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include "FreeImage.h"
+#include "glew.h"
 #include "glut.h"
 #include "Vec3d.h"
 

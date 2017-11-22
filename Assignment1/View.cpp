@@ -32,15 +32,18 @@ void View::LoadView(const string &view_file)
 	{
 		if (term == "eye")
 		{
-			fin >> eye[0] >> eye[1] >> eye[2];
+			for (size_t i = 0; i < 3; ++i)
+				fin >> eye[i];
 		}
 		else if (term == "vat")
 		{
-			fin >> vat[0] >> vat[1] >> vat[2];
+			for (size_t i = 0; i < 3; ++i)
+				fin >> vat[i];
 		}
 		else if (term == "vup")
 		{
-			fin >> vup[0] >> vup[1] >> vup[2];
+			for (size_t i = 0; i < 3; ++i)
+				fin >> vup[i];
 		}
 		else if (term == "fovy")
 		{
@@ -56,7 +59,8 @@ void View::LoadView(const string &view_file)
 		}
 		else if (term == "viewport")
 		{
-			fin >> viewport[0] >> viewport[1] >> viewport[2] >> viewport[3];
+			for (size_t i = 0; i < 4; ++i)
+				fin >> viewport[i];
 		}
 		else
 		{

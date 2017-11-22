@@ -3,13 +3,14 @@
 #include <string>
 #include <vector>
 #include "Mesh.h"
+#include "FreeImage.h"
+#include "glew.h"
 #include "glut.h"
 #include "View.h"
 #include "Light.h"
 #include "Scene.h"
 #include "SceneManager.h"
-
-#define SCENE 1
+#include "TextureManager.h"
 
 int windowSize[2];
 
@@ -25,15 +26,18 @@ struct Mouse
 	int x, y;
 } mouse_info;
 
-SceneManager& sm = SceneManager::GetInstance(SCENE);
+SceneManager& sm = SceneManager::GetInstance();
+TextureManager& tm = TextureManager::GetInstance();
 
 int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
 	glutInitWindowSize(sm.view->viewport[2], sm.view->viewport[3]);
 	glutInitWindowPosition(sm.view->viewport[0], sm.view->viewport[1]);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutCreateWindow("Assignment1");
+	glewInit();
+	tm.LoadTextures();
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
